@@ -1,0 +1,3 @@
+DataDirectory /var/lib/tor
+#paste address bridge obfs4 bellow
+
