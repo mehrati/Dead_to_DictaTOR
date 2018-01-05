@@ -8,7 +8,7 @@ function start_tor() {
 		sleep 1
 		isfailed=$(systemctl is-failed tor.service)
 		if [ $isfailed == "failed" ]; then
-			echo "failed "
+			echo "failed"
 			restart_tor
 		fi
 		echo "Tor is trying to establish a connection. This may take long for some minutes. Please wait..."
