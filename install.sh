@@ -9,7 +9,11 @@ function check_root() {
 
 function pack_arch() {
 	sudo pacman -Sy 1>/dev/null 2>&1
-	if ! sudo pacman -S tor obfs4proxy proxychains-ng firefox; then
+	if ! sudo pacman -S tor proxychains-ng firefox; then
+		echo "unsuccess install package"
+		uninstall
+	fi
+	if ! yaourt -S obfs4proxy; then
 		echo "unsuccess install package"
 		uninstall
 	fi
@@ -71,36 +75,32 @@ function install_pack() {
 	fi
 
 }
-##todo fix this func later
+
 function config_ddtorrc() {
-	check_root "for cofig ddtorrc"
-	if [ -f "/etc/tor/torrc" ]; then
-		echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
-		cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
-		echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
-		echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
-		echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
-		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
-		if cat ddtorrc | grep "obfs4" >/dev/null; then
-			sed s/" obfs4"/"bridge obfs4"/g ddtorrc >> /etc/tor/torrc
-		else
-			echo "ddtroc is empty please get bridge address from @ and paste this file"
-			uninstall
+	if cat ddtorrc | grep "obfs4" >/dev/null; then
+		if [ -f "/etc/tor/torrc" ]; then
+			echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
+			sudo cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
 		fi
+		sudo echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
+		sudo echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
+		sudo echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
+		sudo echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
+		sudo sed s/" obfs4"/"bridge obfs4"/g ddtorrc >>/etc/tor/torrc
+	else
+		echo "ddtroc is empty please see README file"
 	fi
 }
 
 function install_ddtor() {
-	check_root "for installing"
-	cp ddtor.sh /bin/ && mv /bin/ddtor.sh /bin/ddtor
-	chmod 755 /bin/ddtor
+	sudo cp ddtor.sh /bin/ && mv /bin/ddtor.sh /bin/ddtor
+	sudo chmod 755 /bin/ddtor
 }
 function uninstall() {
-	check_root "for uninstalling"
-	rm /bin/ddtor 1>/dev/null 2>&1
+	sudo rm /bin/ddtor 1>/dev/null 2>&1
 	if [ -f "/etc/tor/torrc.ddtor-backup" ]; then
-		rm /etc/tor/torrc 1>/dev/null 2>&1
-		mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
+		sudo rm /etc/tor/torrc 1>/dev/null 2>&1
+		sudo mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
 	fi
 	exit 1
 }
