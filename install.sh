@@ -107,6 +107,7 @@ function uninstall() {
 	exit 1
 }
 
+#check_root
 config_ddtorrc
 install_ddtor
 check_net

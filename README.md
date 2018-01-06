@@ -19,8 +19,10 @@ Dead to DictaTOR will autamically install Tor in either a Debian based distro li
     "$ sudo ddtor --open"
     "for stop tor service"
     "$ sudo ddtor --stop"
-## Note
+## Note firefox
     better for you use FoxyProxy plugin firefox 
+## Note Telegram Massanger
+
 ## uninstall
     "sudo ./uninstall"
 ## Changes

@@ -59,13 +59,13 @@ function status_tor() {
 		if systemctl status tor.service | grep "Bootstrapped 100%: Done"; then
 			echo "You Connected..."
 			break
-		elif [ $count -eq 2 ]; then
+		elif [ $count -eq 3 ]; then
 			echo "maybe ISP blocked bridge"
 			echo "please see help option $ ddtor --help"
 			stop_tor
 			exit 1
 		else
-			if [ $(expr $SECONDS - $start) -ge 20 ]; then
+			if [ $(expr $SECONDS - $start) -ge 30 ]; then
 				echo "tor not connected"
 				count=$(expr $count + 1)
 				start=$SECONDS
@@ -161,7 +161,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	*)
-		echo "somthing wrong..."
+		usage
 		exit 1
 		shift # past argument
 		;;
