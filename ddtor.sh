@@ -64,7 +64,6 @@ function status_tor() {
 			echo "You Connected..."
 			break
 		elif [ $count -eq 2 ]; then
-			#edit this -> massage
 			echo "maybe ISP blocked bridge"
 			echo "please see help option $ ddtor --help"
 			stop_tor

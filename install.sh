@@ -16,7 +16,6 @@ function pack_arch() {
 }
 
 function pack_fedora() {
-
 	if ! sudo dnf install -y tor obfs4proxy proxychains firefox; then
 		echo "unsuccess install package"
 		uninstall
@@ -33,7 +32,6 @@ function pack_fedora() {
 
 function pack_deb() {
 	sudo apt-get update >/dev/null
-
 	if ! sudo apt install -y tor obfs4proxy proxychains firefox; then
 		echo "unsuccess install package"
 		uninstall
@@ -48,7 +46,7 @@ function check_net() {
 		uninstall
 	fi
 }
-#todo fix this bug later
+##todo fix this func later
 function install_pack() {
 	if type lsb_release >/dev/null 2>&1; then
 		# linuxbase.org
@@ -73,15 +71,18 @@ function install_pack() {
 	fi
 
 }
-#todo fix this func later
+##todo fix this func later
 function config_ddtorrc() {
 	check_root "for cofig ddtorrc"
 	if [ -f "/etc/tor/torrc" ]; then
 		echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
-		#cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
-		#echo "UseBridges 1 \nClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
+		cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
+		echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
+		echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
+		echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
+		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
 		if cat ddtorrc | grep "obfs4" >/dev/null; then
-			#sed s/"obfs4"/"bridge obfs4"/g ddtorrc >> /etc/tor/torrc
+			sed s/" obfs4"/"bridge obfs4"/g ddtorrc >> /etc/tor/torrc
 		else
 			echo "ddtroc is empty please get bridge address from @ and paste this file"
 			uninstall
@@ -97,7 +98,7 @@ function install_ddtor() {
 function uninstall() {
 	check_root "for uninstalling"
 	rm /bin/ddtor 1>/dev/null 2>&1
-	if [ -f "/etc/tor/torrc.ddtor-backup"]; then
+	if [ -f "/etc/tor/torrc.ddtor-backup" ]; then
 		rm /etc/tor/torrc 1>/dev/null 2>&1
 		mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
 	fi
