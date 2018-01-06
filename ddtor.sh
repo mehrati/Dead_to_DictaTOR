@@ -1,10 +1,10 @@
 #!/bin/sh
 
 usage() {
+
 	echo "Dead to Dictator"
 	echo "this script use tor network for passing the boycott"
-	echo "Usage: $(ddtor) [OPTION]..."
-	echo
+	echo "Usage:$ ddtor [OPTION]..."
 	echo "Options:"
 	echo "  -u, --start"
 	echo "    Start Tor Service"
@@ -23,10 +23,6 @@ usage() {
 
 	exit 0
 }
-
-if [ $# -eq 0 ]; then
-	usage
-fi
 
 function start_tor() {
 	check_root "for starting tor"
@@ -127,6 +123,10 @@ function check_root() {
 		exit 1
 	fi
 }
+
+if [ $# -eq 0 ]; then
+	usage
+fi
 
 while [[ $# -gt 0 ]]; do
 	key="$1"

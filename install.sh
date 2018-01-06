@@ -88,7 +88,7 @@ function config_ddtorrc() {
 		sudo echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
 		sudo echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
 		sudo echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
-		sudo sed s/" obfs4"/"bridge obfs4"/g ddtorrc >>/etc/tor/torrc
+		sudo sed s/" obfs4"/"bridge obfs4"/g ddtorrc | sudo tee -a /etc/tor/torrc
 	else
 		echo "ddtroc is empty please see README file"
 	fi
