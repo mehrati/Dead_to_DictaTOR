@@ -31,4 +31,5 @@
     $ sudo ./uninstall
 ## Version
     Ver 0.1
+    please help me to improve Dead to DictaTOR project
 
