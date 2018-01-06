@@ -1,22 +1,23 @@
 #!/bin/sh
 
 usage() {
+	echo "Dead to Dictator"
+	echo "this script use tor network for passing the boycott"
 	echo "Usage: $(ddtor) [OPTION]..."
-	echo "With no OPTION specified defaults to -v."
 	echo
 	echo "Options:"
 	echo "  -v, --version"
 	echo "    Display the version"
 	echo "  -u, --start"
-	echo "    Start Tor"
+	echo "    Start Tor Service"
 	echo "  -d, --stop"
-	echo "    Stop ..."
+	echo "    Stop Tor Service"
 	echo "  -s, --status"
-	echo "    status"
+	echo "    Status Tor Service"
 	echo "  -c, --config"
-	echo "    config ddtorrc"
+	echo "    Update config ddtorrc"
 	echo "  -h, --help"
-	echo "    Display example and start ddtor."
+	echo "    Display Help Massage"
 
 	exit 0
 }
@@ -39,7 +40,7 @@ function start_tor() {
 		echo "Tor is trying to establish a connection. This may take long for some minutes. Please wait..."
 		status_tor
 	else
-		echo "tor active "
+		echo "tor service active "
 	fi
 }
 
@@ -51,7 +52,7 @@ function status_tor() {
 			echo "failed "
 		fi
 	else
-		echo "tor is not started please start with XXX command"
+		echo "tor is not started please start with $ ddtor --start command"
 		exit 0
 	fi
 	start=$SECONDS
@@ -62,7 +63,8 @@ function status_tor() {
 			break
 		elif [ $count -eq 2 ]; then
 			#edit this -> massage
-			echo "maybe ISP Block bridge send email to torproject@org and chenge bridge in /etc/tor/torc config"
+			echo "maybe ISP blocked bridge"
+			echo "please see help option $ ddtor --help"
 			stop_tor
 			exit 1
 
@@ -98,11 +100,12 @@ function update_conf() {
 }
 
 function help_ddtor() {
-	echo "this func help script"
-}
-
-function parse_arg() {
-	echo "this func pars_arguman"
+	echo "for update bridge address send mail to bellow address"
+	echo "TO : bridges@torproject.org"
+	echo "Subject : no need subject"
+	echo "Body : get transport obfs4"
+	echo "save bridges to somthing.txt file and pass to script "
+	echo "$ ddtor --config somthing.txt"
 }
 
 function stop_tor() {
@@ -125,11 +128,11 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-d | --stop)
-	stop_tor
+		stop_tor
 		shift # past argument
 		;;
 	-s | --status)
-	status_tor
+		status_tor
 		shift # past argument
 		;;
 	-c | --config)
@@ -139,6 +142,11 @@ while [[ $# -gt 0 ]]; do
 		shift # past value
 		;;
 	-h | --help)
+	    help_ddtor
+		shift # past argument
+		;;
+	-v | --version)
+		echo "Dead to Dictator Version 0.1"
 		shift # past argument
 		;;
 	*)
@@ -148,5 +156,3 @@ while [[ $# -gt 0 ]]; do
 		;;
 	esac
 done
-
-#
