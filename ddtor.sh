@@ -6,16 +6,18 @@ usage() {
 	echo "Usage: $(ddtor) [OPTION]..."
 	echo
 	echo "Options:"
-	echo "  -v, --version"
-	echo "    Display the version"
 	echo "  -u, --start"
 	echo "    Start Tor Service"
 	echo "  -d, --stop"
 	echo "    Stop Tor Service"
 	echo "  -s, --status"
 	echo "    Status Tor Service"
+	echo "  -o, --open"
+	echo "    Open FireFox Browser"
 	echo "  -c, --config"
 	echo "    Update config ddtorrc"
+	echo "  -v, --version"
+	echo "    Display the version"
 	echo "  -h, --help"
 	echo "    Display Help Massage"
 
@@ -67,7 +69,6 @@ function status_tor() {
 			echo "please see help option $ ddtor --help"
 			stop_tor
 			exit 1
-
 		else
 			if [ $(expr $SECONDS - $start) -ge 20 ]; then
 				echo "tor not connected"
@@ -96,7 +97,14 @@ function restart_tor() {
 }
 
 function update_conf() {
-	echo "this func must update bridge obfs4 config ddtorrc"
+	check_root "for update Bridge in ddtorrc"
+	if cat $1 | grep "obfs4" >/dev/null; then
+		sed s/"obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
+	else
+		echo "$1 is empty or ..."
+		exit 1
+	fi
+
 }
 
 function help_ddtor() {
@@ -111,6 +119,7 @@ function help_ddtor() {
 function stop_tor() {
 	check_root "for stoping tor"
 	systemctl stop tor.service
+	echo "tor service stop"
 }
 
 function check_root() {
@@ -135,14 +144,17 @@ while [[ $# -gt 0 ]]; do
 		status_tor
 		shift # past argument
 		;;
+	-o | --open)
+		proxychains firefox
+		shift # past argument
+		;;
 	-c | --config)
-		CONF="$2"
-		echo $2
+		update_conf $2
 		shift # past argument
 		shift # past value
 		;;
 	-h | --help)
-	    help_ddtor
+		help_ddtor
 		shift # past argument
 		;;
 	-v | --version)

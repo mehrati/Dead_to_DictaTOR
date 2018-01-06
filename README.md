@@ -1,27 +1,19 @@
 # ddtor
-ddtor will autamically install Tor in either a Debian based distro like Ubuntu or an Arch based distro and configures them as well.
-
-To do this, just run 'traktor.sh' file in a supported shell like bash and watch for prompts it asks you.
-
+Dead to DictaTOR will autamically install Tor in either a Debian based distro like Ubuntu or an Arch based distro and configures them as well.
 ## Note
-Do NOT expect anonymity using this method. If you need anonymity or strong privacy, manually run torbrowser
-
+    Do NOT expect anonymity using this method. If you need anonymity or strong privacy, manually run torbrowser
 ## Install
-
-### Ubuntu
-    sudo add-apt-repository ppa:dani.behzi/traktor
-    sudo apt update
-    sudo apt install traktor
-### ArchLinux
-    yaourt -S traktor
-### Other (May not be able to install yet)
-    wget https://github.com/ubuntu-ir/traktor/archive/master.zip -O traktor.zip
-    unzip traktor.zip && cd traktor-master
-    ./traktor.sh
-
-## Remote update
-    curl -s https://raw.githubusercontent.com/ubuntu-ir/traktor/master/traktor.sh | sh
-    
+    "get bridge by send mail to bellow address"
+    "TO : bridges@torproject.org"
+    "Subject : no need subject"
+    "Body : get transport obfs4"
+    "go to project and save bridges to ddtorrc file"
+    "$ chmod 755 ./install "
+## run
+    "open terminal and run this command"
+    "sudo ddtor --start"
+## uninstall
+    "sudo ./uninstall"
 ## Changes
     Version 0.1:
 

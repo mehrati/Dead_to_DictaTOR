@@ -8,34 +8,38 @@ function check_root() {
 }
 
 function pack_arch() {
-	sudo pacman -R tor obfs4proxy torsocks
+	sudo pacman -R tor obfs4proxy proxychains
 }
 #todo fix this bug later
 function pack_fedora() {
-	sudo dnf remove -y tor obfs4proxy torsocks
+	sudo dnf remove -y tor obfs4proxy proxychains
 }
 #todo fix this bug later
-function pack_suse() {
-	sudo zypper in -l -y tor obfs4proxy torsocks
-}
+# function pack_suse() {
+# 	sudo zypper re -l -y tor obfs4proxy 
+# }
 
 function pack_deb() {
-	sudo apt remove -y tor obfs4proxy torsocks
+	sudo apt remove -y tor obfs4proxy proxychains
 }
 #todo fix this bug later
 function remove_pack() {
-	if uname -a | grep "ARCH" >/dev/null; then
-		pack_arch
-	elif uname -a | grep "DEBIAN" >/dev/null; then
-		pack_deb
-	elif uname -a | grep "Fedora" >/dev/null; then
-		pack_fedora
-	elif uname -a | grep "Suse" >/dev/null; then
-		pack_suse
+	if type lsb_release >/dev/null 2>&1; then
+		# linuxbase.org
+		OS=$(lsb_release -si)
 	else
-	    uninstall
-		echo "sorry ddtor not support this os"
-		exit 1
+		echo "package lsb_release not installed please install it and try again"
+	fi
+	if echo $OS | grep "Arch" >/dev/null; then
+		pack_arch
+	elif echo $OS | grep "Debian" >/dev/null; then
+		pack_deb
+	elif echo $OS | grep "Ubuntu" >/dev/null; then
+		pack_deb
+	elif echo $OS | grep "Mint" >/dev/null; then
+		pack_deb
+	elif echo $OS | grep "Fedora" >/dev/null; then
+		pack_fedora
 	fi
 
 }

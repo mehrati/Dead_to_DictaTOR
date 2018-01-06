@@ -7,33 +7,45 @@ function check_root() {
 	fi
 }
 
-## todo uninstall if not success install pack
-
 function pack_arch() {
 	sudo pacman -Sy 1>/dev/null 2>&1
-	sudo pacman -S tor obfs4proxy torsocks
+	if ! sudo pacman -S tor obfs4proxy proxychains-ng firefox; then
+		echo "unsuccess install package"
+		uninstall
+	fi
 }
 
-# function pack_fedora() {
-# 	sudo dnf install -y tor obfs4proxy torsocks
-# }
+function pack_fedora() {
+
+	if ! sudo dnf install -y tor obfs4proxy proxychains firefox; then
+		echo "unsuccess install package"
+		uninstall
+	fi
+}
 
 # function pack_suse() {
-# 	sudo zypper in -l -y tor obfs4proxy torsocks
+# 	if ! sudo zypper in -l -y tor obfs4proxy proxychains firefox; then
+# 		echo "unsuccess install package"
+# 		uninstall
+# 		exit 1
+# 	fi
 # }
 
 function pack_deb() {
 	sudo apt-get update >/dev/null
-	sudo apt install -y tor obfs4proxy torsocks
+
+	if ! sudo apt install -y tor obfs4proxy proxychains firefox; then
+		echo "unsuccess install package"
+		uninstall
+	fi
 }
 
 function check_net() {
-	if ping google.com 1>/dev/null 2>&1; then
+	if ping google.com -c 1 1>/dev/null 2>&1; then
 		echo "connect"
 	else
 		echo "you must connect to internet"
 		uninstall
-		exit 1
 	fi
 }
 #todo fix this bug later
@@ -44,16 +56,20 @@ function install_pack() {
 	else
 		echo "package lsb_release not installed please install it and try again"
 		uninstall
-		exit 1
 	fi
 	if echo $OS | grep "Arch" >/dev/null; then
 		pack_arch
 	elif echo $OS | grep "Debian" >/dev/null; then
 		pack_deb
+	elif echo $OS | grep "Ubuntu" >/dev/null; then
+		pack_deb
+	elif echo $OS | grep "Mint" >/dev/null; then
+		pack_deb
+	elif echo $OS | grep "Fedora" >/dev/null; then
+		pack_fedora
 	else
 		echo "sorry ddtor not support your OS"
 		uninstall
-		exit 1
 	fi
 
 }
@@ -69,8 +85,6 @@ function config_ddtorrc() {
 		else
 			echo "ddtroc is empty please get bridge address from @ and paste this file"
 			uninstall
-			exit 1
-
 		fi
 	fi
 }
@@ -87,7 +101,7 @@ function uninstall() {
 		rm /etc/tor/torrc 1>/dev/null 2>&1
 		mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
 	fi
-
+	exit 1
 }
 
 config_ddtorrc
