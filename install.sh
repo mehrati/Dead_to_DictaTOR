@@ -78,10 +78,10 @@ function config_ddtorrc() {
 	check_root "for cofig ddtorrc"
 	if [ -f "/etc/tor/torrc" ]; then
 		echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
-		#sudo cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
+		#cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
 		#echo "UseBridges 1 \nClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
 		if cat ddtorrc | grep "obfs4" >/dev/null; then
-			#sudo sed s/"obfs4"/"bridge obfs4"/g ddtorrc >> /etc/tor/torrc
+			#sed s/"obfs4"/"bridge obfs4"/g ddtorrc >> /etc/tor/torrc
 		else
 			echo "ddtroc is empty please get bridge address from @ and paste this file"
 			uninstall
