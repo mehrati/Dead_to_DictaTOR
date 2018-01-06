@@ -1,3 +1,4 @@
+##
  ___               _   _       _           ___           _       _____ _____ ___   
 (  _`\            ( )_( )     ( )_        (  _`\ _      ( )_    (_   _(  _  |  _`\ 
 | | ) |  __    _ _| ,_| |__   | ,_)  _    | | ) (_)  ___| ,_)  _ _| | | ( ) | (_) )
@@ -5,7 +6,7 @@
 | |_) (  ___( (_| | |_| | | | | |_( (_) ) | |_) | ( (___| |_( (_| | | | (_) | |\ \ 
 (____/`\____`\__,_`\__(_) (_) `\__`\___/' (____/(_`\____`\__`\__,_(_) (_____(_) (_)
 
-# Dead to DictaTOR
+## Dead to DictaTOR
     Dead to DictaTOR will autamically install Tor in either a Arch based distro like Antergos or an manjaro distro
 ## Note
     Do NOT expect anonymity using this method. If you need anonymity or strong privacy, manually run torbrowser
