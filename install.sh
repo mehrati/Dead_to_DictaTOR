@@ -81,6 +81,8 @@ function config_ddtorrc() {
 		if [ -f "/etc/tor/torrc" ]; then
 			echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
 			sudo cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
+			sudo rm /etc/tor/torrc
+			sudo touch /etc/tor/torrc
 		fi
 		sudo echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
 		sudo echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
