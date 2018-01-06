@@ -35,7 +35,8 @@ function start_tor() {
 			echo "failed"
 			restart_tor
 		fi
-		echo "Tor is trying to establish a connection. This may take long for some minutes. Please wait..."
+		echo "Tor is trying to establish a connection."
+		echo "This may take long for some minutes. Please wait..."
 		status_tor
 	else
 		echo "tor service active "
@@ -50,7 +51,7 @@ function status_tor() {
 			echo "failed "
 		fi
 	else
-		echo "tor is not started please start with $ ddtor --start command"
+		echo "tor is not started please start with $ ddtor --start commad"
 		exit 0
 	fi
 	start=$SECONDS
