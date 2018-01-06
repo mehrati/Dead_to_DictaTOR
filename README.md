@@ -1,5 +1,5 @@
 # ddtor
-Dead to DictaTOR will autamically install Tor in either a Debian based distro like Ubuntu or an Arch based distro and configures them as well.
+Dead to DictaTOR will autamically install Tor in either a Arch based distro like Antergos or an manjaro based distro
 ## Note
     Do NOT expect anonymity using this method. If you need anonymity or strong privacy, manually run torbrowser
 ## Install
@@ -20,9 +20,11 @@ Dead to DictaTOR will autamically install Tor in either a Debian based distro li
     "for stop tor service"
     "$ sudo ddtor --stop"
 ## Note firefox
-    better for you use FoxyProxy plugin firefox 
+    better for you use FoxyProxy plugin firefox
+    open firefox go to add-ons search  and install foxyproxy 
+    set type proxy= SOCKS 5 IP address = 127.0.0.1 PORT = 9050
 ## Note Telegram Massanger
-
+    open telegram go to setting and connecting through proxy and TCP with custom socks5 Hostname=127.0.0.1 Port=9050 
 ## uninstall
     "sudo ./uninstall"
 ## Changes
