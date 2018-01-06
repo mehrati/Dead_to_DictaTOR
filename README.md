@@ -8,7 +8,8 @@
     Subject : no need subject
     Body : get transport obfs4
     go to project and save bridges to ddtorrc file
-    $ chmod 755 ./install 
+    $ chmod 755 ./install
+    $ sudo ./install
 ## Run
     open terminal and run command
     start tor service
@@ -28,6 +29,6 @@
     set proxy Hostname = 127.0.0.1 , Port = 9050 
 ## uninstall
     $ sudo ./uninstall
-## Changes
-    Version 0.1:
+## Version
+    Ver 0.1
 
