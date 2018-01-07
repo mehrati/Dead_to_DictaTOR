@@ -9,7 +9,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 
 ## Dead to DictaTOR
-    Dead to DictaTOR will autamically installand manage Tor in either a Arch based distro
+    Dead to DictaTOR will autamically installand and manage Tor in either a Arch based distro and ubuntu
 ## Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Install
@@ -18,11 +18,12 @@ ______           _   _       _         ______ _      _      _____ ___________
     Subject : no need subject
     Body : get transport obfs4
     go to project and save bridges to ddtorrc file
-    ```sh
+```sh
     $ chmod 755 ./install
     $ sudo ./install
-    ```
+```
 ## Run
+
 ```sh
     # open terminal and run command
     # start tor service
