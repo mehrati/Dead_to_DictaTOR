@@ -7,14 +7,14 @@ usage() {
 	echo "Usage:$ ddtor [OPTION]..."
 	echo "Options:"
 	echo "  -u, --start"
-	echo "    Start Tor Service"
+	echo "    Up Tor Service"
 	echo "  -d, --stop"
-	echo "    Stop Tor Service"
+	echo "    Down Tor Service"
 	echo "  -s, --status"
 	echo "    Status Tor Service"
 	echo "  -o, --open"
 	echo "    Open FireFox Browser"
-	echo "  -c, --config"
+	echo "  -c, --conf-update"
 	echo "    Update config ddtorrc"
 	echo "  -v, --version"
 	echo "    Display the version"
@@ -95,7 +95,7 @@ function restart_tor() {
 function update_conf() {
 	check_root "for update Bridge in ddtorrc"
 	if cat $1 | grep "obfs4" >/dev/null; then
-		sed s/"obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
+		sed s/" obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
 	else
 		echo "$1 is empty or ..."
 		exit 1
@@ -109,7 +109,7 @@ function help_ddtor() {
 	echo "Subject : no need subject"
 	echo "Body : get transport obfs4"
 	echo "save bridges to somthing.txt file and pass to script "
-	echo "$ ddtor --config somthing.txt"
+	echo "$ ddtor --conf-update somthing.txt"
 }
 
 function stop_tor() {
@@ -148,7 +148,7 @@ while [[ $# -gt 0 ]]; do
 		proxychains firefox
 		shift # past argument
 		;;
-	-c | --config)
+	-c | --conf-update)
 		update_conf $2
 		shift # past argument
 		shift # past value

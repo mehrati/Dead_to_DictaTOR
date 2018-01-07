@@ -35,6 +35,7 @@ function pack_fedora() {
 # }
 
 function pack_deb() {
+	sudo add-apt-repository ppa:hda-me/proxychains-ng
 	sudo apt-get update >/dev/null
 	if ! sudo apt install -y tor obfs4proxy proxychains firefox; then
 		echo "unsuccess install package"
