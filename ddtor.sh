@@ -1,5 +1,7 @@
 #!/bin/sh
-
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
 usage() {
 
 	echo "Dead to Dictator"
@@ -32,15 +34,14 @@ function start_tor() {
 		sleep 1
 		isfailed=$(systemctl is-failed tor.service)
 		if [ $isfailed == "failed" ]; then
-			echo "failed"
+			echo -e "${RED}[-] Failed${NC}"
 			restart_tor
 		fi
-		clear
 		echo "Tor is trying to establish a connection."
 		echo "This may take long for some minutes. Please wait..."
 		status_tor
 	else
-		echo "tor service active "
+		echo -e "${GREEN}[+] Tor Service Active ${NC}"
 	fi
 }
 
@@ -49,26 +50,27 @@ function status_tor() {
 	if [ $isactive == "active" ]; then
 		isfailed=$(systemctl is-failed tor.service)
 		if [ $isfailed == "failed" ]; then
-			echo "failed "
+			echo -e "${RED}[-] Failed${NC}"
 		fi
 	else
-		echo "tor is not started please start with $ ddtor --start commad"
+		echo -e "${RED}[-] Tor is not started${NC}"
+		echo "please start with $ ddtor --start commad"
 		exit 0
 	fi
 	start=$SECONDS
 	count=0
 	while true; do
-		if systemctl status tor.service | grep "Bootstrapped 100%: Done"; then
-			echo "You Connected..."
+		if systemctl status tor.service | grep "Bootstrapped 100%: Done" >/dev/null; then
+			echo -e "${GREEN}[+] Bootstrapped 100% you connected ...${NC}"
 			break
 		elif [ $count -eq 3 ]; then
-			echo "maybe ISP blocked bridge"
-			echo "please see help option $ ddtor --help"
+			echo "[!] Maybe ISP blocked bridge"
+			echo "Please see help option $ ddtor --help"
 			stop_tor
 			exit 1
 		else
 			if [ $(expr $SECONDS - $start) -ge 30 ]; then
-				echo "tor not connected"
+				echo -e "${RED}[-] Tor not connected${NC}"
 				count=$(expr $count + 1)
 				start=$SECONDS
 				restart_tor
@@ -80,7 +82,7 @@ function status_tor() {
 
 function restart_tor() {
 	check_root "for restarting"
-	echo -n "are you sure restart tor.service y/n? "
+	echo -n "Are you sure restart tor.service y/n? "
 	read answer
 	answer=${answer:-'y'} # set default value as yes
 	if [ $answer == 'y' -o $answer == 'Y' ]; then
@@ -88,7 +90,7 @@ function restart_tor() {
 		echo "restarted !!!"
 		sleep 1
 	else
-		echo "Exiting ..."
+		echo -e "${RED}Exiting ...${NC}"
 		exit 1
 	fi
 }
@@ -98,7 +100,7 @@ function update_conf() {
 	if cat $1 | grep "obfs4" >/dev/null; then
 		sed s/" obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
 	else
-		echo "$1 is empty or ..."
+		echo -e "${RED} $1 is empty or ...${NC}"
 		exit 1
 	fi
 
@@ -116,12 +118,12 @@ function help_ddtor() {
 function stop_tor() {
 	check_root "for stoping tor"
 	systemctl stop tor.service
-	echo "tor service stop"
+	echo -e "${RED}[-] Tor Service Stop${NC}"
 }
 
 function check_root() {
 	if [[ $EUID -ne 0 ]]; then
-		echo "$1 you must be run as root"
+		echo -e "${RED} $1[!] You must be run as root${NC}"
 		exit 1
 	fi
 }
@@ -159,7 +161,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-v | --version)
-		echo "Dead to Dictator Version 0.1"
+		echo -e "${GREEN}[+] Dead to Dictator Version 0.1${NC}"
 		shift # past argument
 		;;
 	*)
