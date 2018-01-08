@@ -29,7 +29,7 @@ usage() {
 }
 
 function start_tor() {
-	check_root "for starting tor"
+	check_root "[!] for starting tor"
 	isactive=$(systemctl is-active tor.service)
 	if [ $isactive == "inactive" ]; then
 		systemctl start tor.service
@@ -83,7 +83,7 @@ function status_tor() {
 }
 
 function restart_tor() {
-	check_root "for restarting"
+	check_root "[!] for restarting"
 	echo -n "Are you sure restart tor.service y/n? "
 	read answer
 	answer=${answer:-'y'} # set default value as yes
@@ -98,7 +98,7 @@ function restart_tor() {
 }
 
 function update_conf() {
-	check_root "for update Bridge in ddtorrc"
+	check_root "[!] for update Bridge in ddtorrc"
 	if cat $1 | grep "obfs4" >/dev/null; then
 		sed s/" obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
 	else
@@ -118,14 +118,14 @@ function help_ddtor() {
 }
 
 function stop_tor() {
-	check_root "for stoping tor"
+	check_root "[!] for stoping tor"
 	systemctl stop tor.service
 	echo -e "${RED}[-] Tor Service Stop${NC}"
 }
 
 function check_root() {
 	if [[ $EUID -ne 0 ]]; then
-		echo -e "${RED} $1[!] You must be run as root${NC}"
+		echo -e "${RED} $1 you must be run as root${NC}"
 		exit 1
 	fi
 }

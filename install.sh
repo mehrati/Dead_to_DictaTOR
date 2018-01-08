@@ -23,13 +23,6 @@ function pack_fedora() {
 	fi
 }
 
-# function pack_suse() {
-# 	if ! sudo zypper in -l -y tor obfs4proxy proxychains firefox; then
-# 		echo "unsuccessfully install package"
-# 		exit 1
-# 	fi
-# }
-
 function pack_deb() {
 	sudo add-apt-repository ppa:hda-me/proxychains-ng
 	sudo apt-get update >/dev/null
@@ -37,6 +30,13 @@ function pack_deb() {
 		echo "unsuccess install package"
 	fi
 }
+
+# function pack_suse() {
+# 	if ! sudo zypper in -l -y tor obfs4proxy proxychains firefox; then
+# 		echo "unsuccessfully install package"
+# 		exit 1
+# 	fi
+# }
 
 function check_net() {
 	if ping google.com -c 1 1>/dev/null 2>&1; then
@@ -46,10 +46,9 @@ function check_net() {
 
 	fi
 }
-##todo fix this func later
+# todo fix this function later
 function install_pack() {
 	if type lsb_release 1>/dev/null 2>&1; then
-		# linuxbase.org
 		OS=$(lsb_release -si)
 	else
 		echo "sorry package lsb_release not installed please install it and try again"
@@ -96,6 +95,6 @@ function install_ddtor() {
 
 check_net
 install_pack
-check_root
+check_root "for install"
 config_ddtorrc
 install_ddtor
