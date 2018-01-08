@@ -6,7 +6,7 @@ function check_root() {
 		exit 1
 	fi
 }
-# todo check installed or not
+# todo check installed package or not
 function pack_arch() {
 	sudo pacman -Sy 1>/dev/null 2>&1
 	if ! sudo pacman -S tor proxychains-ng firefox; then
@@ -53,7 +53,6 @@ function install_pack() {
 		OS=$(lsb_release -si)
 	else
 		echo "sorry package lsb_release not installed please install it and try again"
-		echo "or install manually package tor,firefox,obfs4proxy,proxychains"
 	fi
 	if echo $OS | grep "Arch" >/dev/null; then
 		pack_arch
@@ -79,11 +78,11 @@ function config_ddtorrc() {
 			rm /etc/tor/torrc
 			touch /etc/tor/torrc
 		fi
-		echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
-		echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
-		echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
-		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
-		sed s/" obfs4"/"bridge obfs4"/g ddtorrc | sudo tee -a /etc/tor/torrc
+		echo "Log notice syslog" | tee -a /etc/tor/torrc > /dev/null 
+		echo "DataDirectory /var/lib/tor" | tee -a /etc/tor/torrc > /dev/null
+		echo "UseBridges 1" | tee -a /etc/tor/torrc > /dev/null
+		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | tee -a /etc/tor/torrc > /dev/null
+		sed s/" obfs4"/"bridge obfs4"/g ddtorrc | tee -a /etc/tor/torrc > /dev/null
 	else
 		echo "ddtroc is empty please see README file"
 		exit 1
