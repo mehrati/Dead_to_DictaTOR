@@ -8,11 +8,11 @@ function check_root() {
 }
 
 function pack_arch() {
-	sudo pacman -R tor obfs4proxy proxychains
+	pacman -R tor obfs4proxy proxychains
 }
 #todo fix this bug later
 function pack_fedora() {
-	sudo dnf remove -y tor obfs4proxy proxychains
+	dnf remove -y tor obfs4proxy proxychains
 }
 #todo fix this bug later
 # function pack_suse() {
@@ -20,7 +20,7 @@ function pack_fedora() {
 # }
 
 function pack_deb() {
-	sudo apt remove -y tor obfs4proxy proxychains
+	apt remove -y tor obfs4proxy proxychains
 }
 #todo fix this bug later
 function remove_pack() {
@@ -28,7 +28,7 @@ function remove_pack() {
 		# linuxbase.org
 		OS=$(lsb_release -si)
 	else
-		echo "package lsb_release not installed please install it and try again"
+		echo "sorry you must romve package tor,obfs4proxy,proxychains manually"
 	fi
 	if echo $OS | grep "Arch" >/dev/null; then
 		pack_arch
@@ -46,10 +46,10 @@ function remove_pack() {
 
 function uninstall(){
 	check_root "for uninstalling"
-	rm /bin/ddtor 1>/dev/null 2>&1
+	rm /bin/ddtor 2>/dev/null
 	if [ -f "/etc/tor/torrc.ddtor-backup"] ;then
-	rm /etc/tor/torrc 1>/dev/null 2>&1
-	mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
+	rm /etc/tor/torrc 2>/dev/null
+	mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc 2>/dev/null
 	fi
 
 }
