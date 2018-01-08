@@ -47,6 +47,6 @@ ______           _   _       _         ______ _      _      _____ ___________
     $ sudo ./uninstall
 ```
 ## Version
-    V 0.1
+    V 0.2
     please help me to improve Dead to DictaTOR project
 

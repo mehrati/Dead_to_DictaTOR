@@ -6,30 +6,26 @@ function check_root() {
 		exit 1
 	fi
 }
-
+# todo check installed or not
 function pack_arch() {
 	sudo pacman -Sy 1>/dev/null 2>&1
 	if ! sudo pacman -S tor proxychains-ng firefox; then
-		echo "unsuccess install package"
-		uninstall
+		echo "unsuccessfully install package"
 	fi
 	if ! yaourt -S obfs4proxy; then
-		echo "unsuccess install package"
-		uninstall
+		echo "unsuccessfully install package"
 	fi
 }
 
 function pack_fedora() {
 	if ! sudo dnf install -y tor obfs4proxy proxychains firefox; then
-		echo "unsuccess install package"
-		uninstall
+		echo "unsuccessfully install package"
 	fi
 }
 
 # function pack_suse() {
 # 	if ! sudo zypper in -l -y tor obfs4proxy proxychains firefox; then
-# 		echo "unsuccess install package"
-# 		uninstall
+# 		echo "unsuccessfully install package"
 # 		exit 1
 # 	fi
 # }
@@ -39,7 +35,6 @@ function pack_deb() {
 	sudo apt-get update >/dev/null
 	if ! sudo apt install -y tor obfs4proxy proxychains firefox; then
 		echo "unsuccess install package"
-		uninstall
 	fi
 }
 
@@ -48,17 +43,17 @@ function check_net() {
 		echo "connect"
 	else
 		echo "you must connect to internet"
-		uninstall
+
 	fi
 }
 ##todo fix this func later
 function install_pack() {
-	if type lsb_release >/dev/null 2>&1; then
+	if type lsb_release 1>/dev/null 2>&1; then
 		# linuxbase.org
 		OS=$(lsb_release -si)
 	else
-		echo "package lsb_release not installed please install it and try again"
-		uninstall
+		echo "sorry package lsb_release not installed please install it and try again"
+		echo "or install manually package tor,firefox,obfs4proxy,proxychains"
 	fi
 	if echo $OS | grep "Arch" >/dev/null; then
 		pack_arch
@@ -72,7 +67,6 @@ function install_pack() {
 		pack_fedora
 	else
 		echo "sorry ddtor not support your OS"
-		uninstall
 	fi
 
 }
@@ -81,35 +75,28 @@ function config_ddtorrc() {
 	if cat ddtorrc | grep "obfs4" >/dev/null; then
 		if [ -f "/etc/tor/torrc" ]; then
 			echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
-			sudo cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
-			sudo rm /etc/tor/torrc
-			sudo touch /etc/tor/torrc
+			cp /etc/tor/torrc /etc/tor/torrc.ddtor-backup
+			rm /etc/tor/torrc
+			touch /etc/tor/torrc
 		fi
-		sudo echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
-		sudo echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
-		sudo echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
-		sudo echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
-		sudo sed s/" obfs4"/"bridge obfs4"/g ddtorrc | sudo tee -a /etc/tor/torrc
+		echo "Log notice syslog" | sudo tee -a /etc/tor/torrc
+		echo "DataDirectory /var/lib/tor" | sudo tee -a /etc/tor/torrc
+		echo "UseBridges 1" | sudo tee -a /etc/tor/torrc
+		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | sudo tee -a /etc/tor/torrc
+		sed s/" obfs4"/"bridge obfs4"/g ddtorrc | sudo tee -a /etc/tor/torrc
 	else
 		echo "ddtroc is empty please see README file"
+		exit 1
 	fi
 }
 
 function install_ddtor() {
-	sudo cp ddtor.sh /bin/ && mv /bin/ddtor.sh /bin/ddtor
-	sudo chmod 755 /bin/ddtor
-}
-function uninstall() {
-	sudo rm /bin/ddtor 1>/dev/null 2>&1
-	if [ -f "/etc/tor/torrc.ddtor-backup" ]; then
-		sudo rm /etc/tor/torrc 1>/dev/null 2>&1
-		sudo mv /etc/tor/torrc.ddtor-backup /etc/tor/torrc
-	fi
-	exit 1
+	cp ddtor.sh /bin/ && mv /bin/ddtor.sh /bin/ddtor
+	chmod 755 /bin/ddtor
 }
 
-#check_root
-config_ddtorrc
-install_ddtor
 check_net
 install_pack
+check_root
+config_ddtorrc
+install_ddtor

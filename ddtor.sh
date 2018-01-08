@@ -163,7 +163,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-v | --version)
-		echo -e "${GREEN}[+] Dead to Dictator Version 0.1${NC}"
+		echo -e "${GREEN}[+] Dead to Dictator Version 0.2${NC}"
 		shift # past argument
 		;;
 	*)
