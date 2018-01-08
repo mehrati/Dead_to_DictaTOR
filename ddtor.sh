@@ -35,6 +35,7 @@ function start_tor() {
 			echo "failed"
 			restart_tor
 		fi
+		clear
 		echo "Tor is trying to establish a connection."
 		echo "This may take long for some minutes. Please wait..."
 		status_tor
@@ -79,7 +80,7 @@ function status_tor() {
 
 function restart_tor() {
 	check_root "for restarting"
-	echo "are you sure restart tor.service y/n ?"
+	echo -n "are you sure restart tor.service y/n? "
 	read answer
 	answer=${answer:-'y'} # set default value as yes
 	if [ $answer == 'y' -o $answer == 'Y' ]; then

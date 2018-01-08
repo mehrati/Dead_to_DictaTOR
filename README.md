@@ -8,9 +8,9 @@ ______           _   _       _         ______ _      _      _____ ___________
 |___/ \___|\__,_|\__|_| |_|  \__\___/  |___/ |_|\___|\__\__,_\_/  \___/\_| \_|
 ```
 
-## Dead to DictaTOR
-    Dead to DictaTOR will autamically installand and manage Tor in either a Arch based distro and ubuntu
-## Note
+# Dead to DictaTOR
+    autamically installand and manage Tor in either a Arch based distro and ubuntu
+# Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Install
     get bridge by send mail to bellow address
@@ -47,6 +47,6 @@ ______           _   _       _         ______ _      _      _____ ___________
     $ sudo ./uninstall
 ```
 ## Version
-    0.1
+    V 0.1
     please help me to improve Dead to DictaTOR project
 
