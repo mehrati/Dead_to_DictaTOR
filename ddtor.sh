@@ -84,7 +84,7 @@ function status_tor() {
 
 function restart_tor() {
 	check_root "[!] for restarting"
-	echo -n "Are you sure restart tor.service y/n? "
+	echo -n "Are you sure restart tor.service ? [y/n] "
 	read answer
 	answer=${answer:-'y'} # set default value as yes
 	if [ $answer == 'y' -o $answer == 'Y' ]; then

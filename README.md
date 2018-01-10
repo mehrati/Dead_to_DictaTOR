@@ -46,7 +46,8 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```sh
     $ sudo ./uninstall
 ```
+## Contributing
+    Contributions are welcome! Please feel free to submit a Pull Request.
 ## Version
     V 0.2
-    please help me to improve Dead to DictaTOR project
 
