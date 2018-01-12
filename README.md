@@ -12,6 +12,8 @@ ______           _   _       _         ______ _      _      _____ ___________
     autamically installand and manage Tor in either a Arch based distro and ubuntu
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
+## Dependency
+    you must install Gnu Make , Go lang , Git
 ## Install
     get bridge by send mail to bellow address
     TO : bridges@torproject.org
@@ -49,5 +51,5 @@ ______           _   _       _         ______ _      _      _____ ___________
 ## Contributing
     Contributions are welcome! Please feel free to submit a Pull Request.
 ## Version
-    V 0.2
+    V 0.3
 
