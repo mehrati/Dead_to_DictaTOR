@@ -17,7 +17,7 @@ usage() {
 	echo "  -s, --status"
 	echo "    Status Tor Service"
 	echo "  -o, --open"
-	echo "    Open FireFox Browser"
+	echo "    Open Web Browser"
 	echo "  -c, --conf-update"
 	echo "    Update config ddtorrc"
 	echo "  -v, --version"
@@ -29,6 +29,7 @@ usage() {
 }
 
 function start_tor() {
+	check_net
 	check_root "[!] for starting tor"
 	isactive=$(systemctl is-active tor.service)
 	if [ $isactive == "inactive" ]; then
@@ -41,13 +42,15 @@ function start_tor() {
 		fi
 		echo "[*] Tor is trying to establish a connection."
 		echo "[*] This may take long for some minutes. Please wait..."
-		status_tor
+		status_tor 30
 	else
 		echo -e "${GREEN}[+] Tor Service Active ${NC}"
 	fi
 }
 
 function status_tor() {
+	sec=$1
+	check_net
 	isactive=$(systemctl is-active tor.service)
 	if [ $isactive == "active" ]; then
 		isfailed=$(systemctl is-failed tor.service)
@@ -71,11 +74,12 @@ function status_tor() {
 			stop_tor
 			exit 1
 		else
-			if [ $(expr $SECONDS - $start) -ge 30 ]; then
+			if [ $(expr $SECONDS - $start) -ge $sec ]; then
 				echo -e "${RED}[-] Tor not connected${NC}"
 				count=$(expr $count + 1)
 				start=$SECONDS
 				restart_tor
+				sec=30
 			fi
 			sleep 2
 		fi
@@ -89,10 +93,10 @@ function restart_tor() {
 	answer=${answer:-'y'} # set default value as yes
 	if [ $answer == 'y' -o $answer == 'Y' ]; then
 		systemctl restart tor.service
-		echo "restarted !!!"
+		echo -e "${RED}[*] Restarted ${NC}"
 		sleep 1
 	else
-		echo -e "${RED}Exiting ...${NC}"
+		echo -e "${RED}[*] Exiting ...${NC}"
 		exit 1
 	fi
 }
@@ -102,7 +106,7 @@ function update_conf() {
 	if cat $1 | grep "obfs4" >/dev/null; then
 		sed s/" obfs4"/"bridge obfs4"/g $1 >>/etc/tor/torrc
 	else
-		echo -e "${RED} $1 is empty or ...${NC}"
+		echo -e "${RED}$1 is empty or ...${NC}"
 		exit 1
 	fi
 
@@ -113,19 +117,15 @@ function help_ddtor() {
 	echo "TO : bridges@torproject.org"
 	echo "Subject : no need subject"
 	echo "Body : get transport obfs4"
-	echo "save bridges to somthing.txt file and pass to script "
-	echo "$ ddtor --conf-update somthing.txt"
+	echo "save bridges to somthing.conf file and pass to script "
+	echo "$ ddtor --conf-update somthing.conf"
 }
 
 function open_browser() {
-	if which firefox >/dev/null; then
-		proxychains firefox
-	elif which chromium >/dev/null; then
-		proxychains chromium
-	elif which google-chrome-stable >/dev/null; then
-		proxychains google-chrome-stable
+	if systemctl status tor.service | grep "Bootstrapped 100%: Done" >/dev/null; then
+		proxychains $1 $2
 	else
-		echo "${RED}[-] No browser installed your system${NC}"
+		echo -e "${RED}[-] Tor not connected${NC}"
 	fi
 
 }
@@ -138,7 +138,18 @@ function stop_tor() {
 
 function check_root() {
 	if [[ $EUID -ne 0 ]]; then
-		echo -e "${RED} $1 you must be run as root${NC}"
+		echo -e "${RED}$1[!] You must be run as root${NC}"
+		exit 1
+	fi
+}
+
+function check_net() {
+	if ! ping google.com -c 2 1>/dev/null 2>&1; then
+		echo -e "${RED}[-] You disconnect${NC}"
+		isactive=$(systemctl is-active tor.service)
+		if [ $isactive == "active" ]; then
+			stop_tor
+		fi
 		exit 1
 	fi
 }
@@ -159,12 +170,13 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-s | --status)
-		status_tor
+		status_tor 1
 		shift # past argument
 		;;
 	-o | --open)
-		open_browser
-
+		open_browser $2 $3
+		shift # past argument
+		shift # past argument
 		shift # past argument
 		;;
 	-c | --conf-update)
@@ -177,7 +189,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-v | --version)
-		echo -e "${GREEN}[+] Dead to Dictator Version 0.2${NC}"
+		echo -e "${GREEN}[+] Dead to Dictator Version 0.3 beta ${NC}"
 		shift # past argument
 		;;
 	*)
