@@ -39,8 +39,8 @@ function start_tor() {
 			echo -e "${RED}[-] Failed${NC}"
 			restart_tor
 		fi
-		echo "Tor is trying to establish a connection."
-		echo "This may take long for some minutes. Please wait..."
+		echo "[*] Tor is trying to establish a connection."
+		echo "[*] This may take long for some minutes. Please wait..."
 		status_tor
 	else
 		echo -e "${GREEN}[+] Tor Service Active ${NC}"
@@ -56,7 +56,7 @@ function status_tor() {
 		fi
 	else
 		echo -e "${RED}[-] Tor is not started${NC}"
-		echo "please start with $ ddtor --start commad"
+		echo "[*] Please start with $ ddtor --start commad"
 		exit 0
 	fi
 	start=$SECONDS
@@ -67,7 +67,7 @@ function status_tor() {
 			break
 		elif [ $count -eq 3 ]; then
 			echo "[!] Maybe ISP blocked bridge"
-			echo "Please see help option $ ddtor --help"
+			echo "[*] Please see help option $ ddtor --help"
 			stop_tor
 			exit 1
 		else
@@ -117,6 +117,19 @@ function help_ddtor() {
 	echo "$ ddtor --conf-update somthing.txt"
 }
 
+function open_browser() {
+	if which firefox >/dev/null; then
+		proxychains firefox
+	elif which chromium >/dev/null; then
+		proxychains chromium
+	elif which google-chrome-stable >/dev/null; then
+		proxychains google-chrome-stable
+	else
+		echo "${RED}[-] No browser installed your system${NC}"
+	fi
+
+}
+
 function stop_tor() {
 	check_root "[!] for stoping tor"
 	systemctl stop tor.service
@@ -150,7 +163,8 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-o | --open)
-		proxychains firefox
+		open_browser
+
 		shift # past argument
 		;;
 	-c | --conf-update)
