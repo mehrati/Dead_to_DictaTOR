@@ -8,7 +8,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 |___/ \___|\__,_|\__|_| |_|  \__\___/  |___/ |_|\___|\__\__,_\_/  \___/\_| \_|
 ```
 
-# Dead to DictaTOR
+# Death to DictaTOR
     autamically installand and manage Tor in either a Arch based distro and ubuntu
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
@@ -51,5 +51,5 @@ ______           _   _       _         ______ _      _      _____ ___________
 ## Contributing
     Contributions are welcome! Please feel free to submit a Pull Request.
 ## Version
-    V 0.3
+    V 0.3 beta
 
