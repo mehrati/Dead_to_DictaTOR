@@ -52,15 +52,15 @@ function status_tor() {
 	sec=$1
 	check_net
 	isactive=$(systemctl is-active tor.service)
-	if [ $isactive == "active" ]; then
-		isfailed=$(systemctl is-failed tor.service)
-		if [ $isfailed == "failed" ]; then
-			echo -e "${RED}[-] Failed${NC}"
-		fi
-	else
+	if [ $isactive == "inactive" ]; then
 		echo -e "${RED}[-] Tor is not started${NC}"
 		echo "[*] Please start with $ ddtor --start commad"
-		exit 0
+		exit 1
+	fi
+	isfailed=$(systemctl is-failed tor.service)
+	if [ $isfailed == "failed" ]; then
+		echo -e "${RED}[-] Failed${NC}"
+		restart_tor
 	fi
 	start=$SECONDS
 	count=0
@@ -96,6 +96,7 @@ function restart_tor() {
 		echo -e "${RED}[*] Restarted ${NC}"
 		sleep 1
 	else
+		stop_tor
 		echo -e "${RED}[*] Exiting ...${NC}"
 		exit 1
 	fi
