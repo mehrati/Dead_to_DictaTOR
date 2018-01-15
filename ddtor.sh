@@ -139,7 +139,7 @@ function stop_tor() {
 
 function check_root() {
 	if [[ $EUID -ne 0 ]]; then
-		echo -e "${RED}$1[!] You must be run as root${NC}"
+		echo -e "${RED}$1 you must be run as root${NC}"
 		exit 1
 	fi
 }
