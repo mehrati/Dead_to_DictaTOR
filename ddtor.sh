@@ -31,13 +31,47 @@ usage() {
 function start_tor() {
 	check_net
 	check_root "[!] for starting tor"
-	isactive=$(systemctl is-active tor.service)
-	if [ $isactive == "inactive" ]; then
+
+	isactivedns=$(systemctl is-active dnscrypt-proxy.service)
+	if [ $isactivedns == "inactive" ]; then
+		systemctl start dnscrypt-proxy.service
+		echo "[*] Start dnscrypt-proxy"
+		cp /etc/resolv.conf /etc/resolv.tmp-ddtor.conf
+		echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
+		isfaileddns=$(systemctl is-failed dnscrypt-proxy.service)
+		if [ $isfaileddns == "failed" ]; then
+			echo -e "${RED}[-] Dnscrypt-proxy Failed${NC}"
+			exit 1
+		fi
+	fi
+
+	while true; do
+		if systemctl status dnscrypt-proxy.service | grep "Proxying from 127.0.0.1:53 to" >/dev/null; then
+			echo "[*] Dnscrypt-proxy Ok"
+			break
+		else
+			sleep 2
+		fi
+	done
+
+	# Proxying from 127.0.0.1:53 to
+	# isactivepri=$(systemctl is-active privoxy.service)
+	# if [ $isactivepri == "inactive" ]; then
+	# 	systemctl start privoxy.service
+	#   echo "[*] Start privoxy"
+	# 	isfailedpri=$(systemctl is-failed privoxy.service)
+	# 	if [ $isfailedpri == "failed" ]; then
+	# 		echo -e "${RED}[-] Privoxy Failed${NC}"
+	# 		exit 1
+	# 	fi
+	# fi
+	isactivetor=$(systemctl is-active tor.service)
+	if [ $isactivetor == "inactive" ]; then
 		systemctl start tor.service
 		sleep 1
-		isfailed=$(systemctl is-failed tor.service)
-		if [ $isfailed == "failed" ]; then
-			echo -e "${RED}[-] Failed${NC}"
+		isfailedtor=$(systemctl is-failed tor.service)
+		if [ $isfailedtor == "failed" ]; then
+			echo -e "${RED}[-] Tor Failed${NC}"
 			restart_tor
 		fi
 		echo "[*] Tor is trying to establish a connection."
@@ -133,6 +167,13 @@ function open_browser() {
 
 function stop_tor() {
 	check_root "[!] for stoping tor"
+	if [ -f "/etc/resolv.tmp-ddtor.conf" ]; then
+		cp /etc/resolv.tmp-ddtor.conf /etc/resolv.conf
+		rm /etc/resolv.tmp-ddtor.conf
+	fi
+	systemctl stop dnscrypt-proxy.service >/dev/null
+	systemctl stop dnscrypt-proxy.socket
+	systemctl stop privoxy.service
 	systemctl stop tor.service
 	echo -e "${RED}[-] Tor Service Stop${NC}"
 }
