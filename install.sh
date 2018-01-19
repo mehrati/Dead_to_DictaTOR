@@ -37,13 +37,6 @@ function check_package() {
 
 }
 
-function check_net() {
-	if ! ping google.com -c 1 1>/dev/null 2>&1; then
-		echo "you must connect to internet"
-		exit 1
-	fi
-}
-
 function config_ddtorrc() {
 	if cat ddtorrc | grep "obfs4" >/dev/null; then
 		if [ -f "/etc/tor/torrc" ]; then
@@ -70,7 +63,6 @@ function install_ddtor() {
 }
 
 check_root "for install"
-check_net
 check_package
 config_ddtorrc
 install_ddtor
