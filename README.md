@@ -13,7 +13,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Dependency
-    you must install Gnu Make , Go lang , Git
+    you must install Tor Client , Dnscrypt-proxy , Privoxy , Proxychain-ng
 ## Install
     get bridge by send mail to bellow address
     TO : bridges@torproject.org
@@ -40,10 +40,10 @@ ______           _   _       _         ______ _      _      _____ ___________
 ## Firefox
     better for you use FoxyProxy plugin firefox
     open firefox go to add-ons search  and install foxyproxy 
-    set type proxy = SOCKS 5 , IP address = 127.0.0.1 , PORT = 9050
+    set type proxy = SOCKS 5 , IP address = 127.0.0.1 , PORT = 8118
 ## Telegram Massanger
     open telegram go to setting -> connecting through proxy -> TCP with custom socks5 
-    set proxy Hostname = 127.0.0.1 , Port = 9050 
+    set proxy Hostname = 127.0.0.1 , Port = 8118 
 ## uninstall
 ```sh
     $ sudo ./uninstall

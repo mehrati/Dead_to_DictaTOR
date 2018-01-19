@@ -7,19 +7,9 @@ function check_root() {
 	fi
 }
 
-function install_package() {
-
-	git clone https://github.com/torproject/tor.git
-	cd tor
-	sh autogen.sh && ./configure && make && make install
-	cd ..
-	go get git.torproject.org/pluggable-transports/obfs4.git/obfs4proxy
-	git clone https://github.com/rofl0r/proxychains-ng.git
-	cd proxychains-ng
-	./configure --prefix=/usr --sysconfdir=/etc # configure and install
-	make
-	make install && make install-config # installs /etc/proxychains.conf
-	cd ..
+function check_package() {
+	# tor proxychains  dnscrypt-proxy obfs4 privoxy
+	
 }
 
 function check_net() {
@@ -55,6 +45,6 @@ function install_ddtor() {
 
 check_root "for install"
 check_net
-install_package
+check_package
 config_ddtorrc
 install_ddtor

@@ -31,40 +31,46 @@ usage() {
 function start_tor() {
 	check_net
 	check_root "[!] for starting tor"
-
+	isactivepri=$(systemctl is-active privoxy.service)
+	if [ $isactivepri == "inactive" ]; then
+		systemctl start privoxy.service
+		echo "[*] Start privoxy"
+	fi
+	sleep 1
+	isfailedpri=$(systemctl is-failed privoxy.service)
+	if [ $isfailedpri == "failed" ]; then
+		echo -e "${RED}[-] Privoxy Failed${NC}"
+		restart_pri
+	fi
 	isactivedns=$(systemctl is-active dnscrypt-proxy.service)
 	if [ $isactivedns == "inactive" ]; then
 		systemctl start dnscrypt-proxy.service
 		echo "[*] Start dnscrypt-proxy"
+
+	fi
+	sleep 1
+	isfaileddns=$(systemctl is-failed dnscrypt-proxy.service)
+	if [ $isfaileddns == "failed" ]; then
+		echo -e "${RED}[-] Dnscrypt-proxy Failed${NC}"
+		restart_tor
+	else
 		cp /etc/resolv.conf /etc/resolv.tmp-ddtor.conf
 		echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
-		isfaileddns=$(systemctl is-failed dnscrypt-proxy.service)
-		if [ $isfaileddns == "failed" ]; then
-			echo -e "${RED}[-] Dnscrypt-proxy Failed${NC}"
-			exit 1
-		fi
 	fi
-
+	startdns=$SECONDS
 	while true; do
 		if systemctl status dnscrypt-proxy.service | grep "Proxying from 127.0.0.1:53 to" >/dev/null; then
 			echo "[*] Dnscrypt-proxy Ok"
 			break
 		else
+			if [ $(expr $SECONDS - $startdns) -ge 15 ]; then
+				echo -e "${RED}[-] Dns not connected${NC}"
+				startdns=$SECONDS
+				restart_dns
+			fi
 			sleep 2
 		fi
 	done
-
-	# Proxying from 127.0.0.1:53 to
-	# isactivepri=$(systemctl is-active privoxy.service)
-	# if [ $isactivepri == "inactive" ]; then
-	# 	systemctl start privoxy.service
-	#   echo "[*] Start privoxy"
-	# 	isfailedpri=$(systemctl is-failed privoxy.service)
-	# 	if [ $isfailedpri == "failed" ]; then
-	# 		echo -e "${RED}[-] Privoxy Failed${NC}"
-	# 		exit 1
-	# 	fi
-	# fi
 	isactivetor=$(systemctl is-active tor.service)
 	if [ $isactivetor == "inactive" ]; then
 		systemctl start tor.service
@@ -74,8 +80,8 @@ function start_tor() {
 			echo -e "${RED}[-] Tor Failed${NC}"
 			restart_tor
 		fi
-		echo "[*] Tor is trying to establish a connection."
-		echo "[*] This may take long for some minutes. Please wait..."
+		echo "[*] Start Tor"
+		echo "[*] Tor is connecting ..."
 		status_tor 30
 	else
 		echo -e "${GREEN}[+] Tor Service Active ${NC}"
@@ -135,7 +141,36 @@ function restart_tor() {
 		exit 1
 	fi
 }
-
+function restart_dns() {
+	check_root "[!] for restarting"
+	echo -n "[?] Are you sure restart dnscrypt-proxy.service ? [y/n] "
+	read answer
+	answer=${answer:-'y'} # set default value as yes
+	if [ $answer == 'y' -o $answer == 'Y' ]; then
+		systemctl restart dnscrypt-proxy.service
+		echo -e "${RED}[*] Restarted ${NC}"
+		sleep 1
+	else
+		stop_tor
+		echo -e "${RED}[*] Exiting ...${NC}"
+		exit 1
+	fi
+}
+function restart_pri() {
+	check_root "[!] for restarting"
+	echo -n "[?] Are you sure restart privoxy.service ? [y/n] "
+	read answer
+	answer=${answer:-'y'} # set default value as yes
+	if [ $answer == 'y' -o $answer == 'Y' ]; then
+		systemctl restart privoxy.service
+		echo -e "${RED}[*] Restarted ${NC}"
+		sleep 1
+	else
+		stop_tor
+		echo -e "${RED}[*] Exiting ...${NC}"
+		exit 1
+	fi
+}
 function update_conf() {
 	check_root "[!] for update Bridge in ddtorrc"
 	if cat $1 | grep "obfs4" >/dev/null; then
@@ -171,11 +206,16 @@ function stop_tor() {
 		cp /etc/resolv.tmp-ddtor.conf /etc/resolv.conf
 		rm /etc/resolv.tmp-ddtor.conf
 	fi
-	systemctl stop dnscrypt-proxy.service >/dev/null
+	systemctl stop dnscrypt-proxy.service 2>/dev/null
+	sleep 1
 	systemctl stop dnscrypt-proxy.socket
+	echo -e "${RED}[-] Stop Dnscrypt-proxy ${NC}"
+	sleep 1
 	systemctl stop privoxy.service
+	echo -e "${RED}[-] Stop Privoxy ${NC}"
+	sleep 1
 	systemctl stop tor.service
-	echo -e "${RED}[-] Tor Service Stop${NC}"
+	echo -e "${RED}[-] Stop Tor ${NC}"
 }
 
 function check_root() {
