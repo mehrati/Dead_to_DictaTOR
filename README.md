@@ -42,7 +42,7 @@ ______           _   _       _         ______ _      _      _____ ___________
     open firefox go to add-ons search  and install foxyproxy 
     set type proxy = SOCKS 5 , IP address = 127.0.0.1 , PORT = 8118
 ## Telegram Massanger
-    open telegram go to setting -> connecting through proxy -> TCP with custom socks5 
+    open telegram go to setting -> connecting through proxy -> HTTP with custom http-proxy 
     set proxy Hostname = 127.0.0.1 , Port = 8118 
 ## uninstall
 ```sh

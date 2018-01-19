@@ -8,8 +8,33 @@ function check_root() {
 }
 
 function check_package() {
-	# tor proxychains  dnscrypt-proxy obfs4 privoxy
-	
+	ok=true
+	if ! whereis tor >/dev/null; then
+		echo "[-] tor not installed"
+		ok=false
+	fi
+	if ! whereis obfs4proxy >/dev/null; then
+		echo "[-] obfs4proxy not installed"
+		ok=false
+	fi
+	if ! whereis proxychains >/dev/null; then
+		echo "[-] proxychains not installed"
+		ok=false
+	fi
+	if ! whereis dnscrypt-proxy >/dev/null; then
+		echo "[-] dnscrypt-proxy not installed"
+		ok=false
+	fi
+	if ! whereis privoxy >/dev/null; then
+		echo "[-] privoxy not installed"
+		ok=false
+	fi
+	if [ $ok ]; then
+		echo "[+] Yes All package installed"
+	else
+		exit 1
+	fi
+
 }
 
 function check_net() {
@@ -36,6 +61,7 @@ function config_ddtorrc() {
 		echo "ddtroc is empty please see README file"
 		exit 1
 	fi
+	echo "forward-socks5 / localhost:9050 ." | tee -a /etc/privoxy/config >/dev/null
 }
 
 function install_ddtor() {
