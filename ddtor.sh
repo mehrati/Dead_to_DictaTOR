@@ -28,13 +28,13 @@ usage() {
 	exit 0
 }
 
-function start_tor() {
+function start_ser() {
 	check_net
 	check_root "[!] for starting tor"
 	isactivepri=$(systemctl is-active privoxy.service)
 	if [ $isactivepri == "inactive" ]; then
 		systemctl start privoxy.service
-		echo "[*] Start privoxy"
+		echo -e "${GREEN}[+] Privoxy Start ${NC}"
 	fi
 	sleep 1
 	isfailedpri=$(systemctl is-failed privoxy.service)
@@ -45,73 +45,119 @@ function start_tor() {
 	isactivedns=$(systemctl is-active dnscrypt-proxy.service)
 	if [ $isactivedns == "inactive" ]; then
 		systemctl start dnscrypt-proxy.service
-		echo "[*] Start dnscrypt-proxy"
-
+		echo -e "${GREEN}[+] Dnscrypt-proxy Start ${NC}"
 	fi
 	sleep 1
 	isfaileddns=$(systemctl is-failed dnscrypt-proxy.service)
 	if [ $isfaileddns == "failed" ]; then
 		echo -e "${RED}[-] Dnscrypt-proxy Failed${NC}"
-		restart_tor
-	else
-		cp /etc/resolv.conf /etc/resolv.tmp-ddtor.conf
-		echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
+		restart_dns
 	fi
+	cp /etc/resolv.conf /etc/resolv.tmp-ddtor.conf
+	echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
+	isactivedns=$(systemctl is-active tor.service)
+	if [ $isactivedns == "inactive" ]; then
+		systemctl start tor.service
+		echo -e "${GREEN}[+] Tor Start${NC}"
+
+	fi
+	sleep 1
+	isfaileddns=$(systemctl is-failed tor.service)
+	if [ $isfaileddns == "failed" ]; then
+		echo -e "${RED}[-] Tor Failed${NC}"
+		restart_tor
+	fi
+	status_all > /dev/null
+	if [ $? == 1 ]; then
+		echo -e "${RED}[-] Somthing Problem ${NC}"
+		stop_ser
+	fi
+	echo -e "[*] Dnscrypt-proxy is connecting ..."
+	status_dns 15
+	if [ $? == 2 ]; then
+		echo -e "${GREEN}[+] Dnscrypt-proxy Connect ${NC}"
+	fi
+	echo -e "[*] Tor is connecting ..."
+	status_tor 30
+	if [ $? == 3 ]; then
+		echo -e "${GREEN}[+] Tor Client Connect ${NC}"
+	fi
+
+}
+function status_all() {
+	failed=false
+	isactivepri=$(systemctl is-active privoxy.service)
+	if [ $isactivepri == "inactive" ]; then
+		echo -e "${RED}[-] Privoxy Stop ${NC}"
+		failed=true
+	fi
+	if [ $isactivepri == "active" ]; then
+		echo -e "${GREEN}[+] Privoxy Active ${NC}"
+	fi
+	isfailedpri=$(systemctl is-failed privoxy.service)
+	if [ $isfailedpri == "failed" ]; then
+		echo -e "${RED}[-] Privoxy Failed${NC}"
+		failed=true
+	fi
+	isactivedns=$(systemctl is-active dnscrypt-proxy.service)
+	if [ $isactivedns == "inactive" ]; then
+		echo -e "${RED}[-] Dnscrypt-proxy Stop ${NC}"
+		failed=true
+	fi
+	if [ $isactivedns == "active" ]; then
+		echo -e "${GREEN}[+] Dnscrypt-proxy Active ${NC}"
+	fi
+	isfaileddns=$(systemctl is-failed dnscrypt-proxy.service)
+	if [ $isfaileddns == "failed" ]; then
+		echo -e "${RED}[-] Dnscrypt-proxy Failed${NC}"
+		failed=true
+	fi
+	isactivedns=$(systemctl is-active tor.service)
+	if [ $isactivedns == "active" ]; then
+		echo -e "${GREEN}[+] Tor Active${NC}"
+	fi
+	if [ $isactivedns == "inactive" ]; then
+		echo -e "${RED}[-] Tor Stop${NC}"
+		failed=true
+	fi
+	isfaileddns=$(systemctl is-failed tor.service)
+	if [ $isfaileddns == "failed" ]; then
+		echo -e "${RED}[-] Tor Failed${NC}"
+		failed=true
+	fi
+	if $failed ; then
+		return 1
+	fi
+}
+function status_dns() {
+	secdns=$1
 	startdns=$SECONDS
 	while true; do
 		if systemctl status dnscrypt-proxy.service | grep "Proxying from 127.0.0.1:53 to" >/dev/null; then
-			echo "[*] Dnscrypt-proxy Ok"
-			break
+			return 2
 		else
-			if [ $(expr $SECONDS - $startdns) -ge 15 ]; then
-				echo -e "${RED}[-] Dns not connected${NC}"
+			if [ $(expr $SECONDS - $startdns) -ge $secdns ]; then
+				echo -e "${RED}[-] Dnscrypt-proxy not connected${NC}"
 				startdns=$SECONDS
 				restart_dns
 			fi
 			sleep 2
 		fi
 	done
-	isactivetor=$(systemctl is-active tor.service)
-	if [ $isactivetor == "inactive" ]; then
-		systemctl start tor.service
-		sleep 1
-		isfailedtor=$(systemctl is-failed tor.service)
-		if [ $isfailedtor == "failed" ]; then
-			echo -e "${RED}[-] Tor Failed${NC}"
-			restart_tor
-		fi
-		echo "[*] Start Tor"
-		echo "[*] Tor is connecting ..."
-		status_tor 30
-	else
-		echo -e "${GREEN}[+] Tor Service Active ${NC}"
-	fi
-}
 
+}
 function status_tor() {
 	sec=$1
 	check_net
-	isactive=$(systemctl is-active tor.service)
-	if [ $isactive == "inactive" ]; then
-		echo -e "${RED}[-] Tor is not started${NC}"
-		echo "[*] Please start with $ ddtor --start commad"
-		exit 1
-	fi
-	isfailed=$(systemctl is-failed tor.service)
-	if [ $isfailed == "failed" ]; then
-		echo -e "${RED}[-] Failed${NC}"
-		restart_tor
-	fi
 	start=$SECONDS
 	count=0
 	while true; do
 		if systemctl status tor.service | grep "Bootstrapped 100%: Done" >/dev/null; then
-			echo -e "${GREEN}[+] Bootstrapped 100% you connected ...${NC}"
-			break
+			return 3
 		elif [ $count -eq 3 ]; then
 			echo "[!] Maybe ISP blocked bridge"
 			echo "[*] Please see help option $ ddtor --help"
-			stop_tor
+			stop_ser
 			exit 1
 		else
 			if [ $(expr $SECONDS - $start) -ge $sec ]; then
@@ -136,7 +182,7 @@ function restart_tor() {
 		echo -e "${RED}[*] Restarted ${NC}"
 		sleep 1
 	else
-		stop_tor
+		stop_ser
 		echo -e "${RED}[*] Exiting ...${NC}"
 		exit 1
 	fi
@@ -151,7 +197,7 @@ function restart_dns() {
 		echo -e "${RED}[*] Restarted ${NC}"
 		sleep 1
 	else
-		stop_tor
+		stop_ser
 		echo -e "${RED}[*] Exiting ...${NC}"
 		exit 1
 	fi
@@ -166,7 +212,7 @@ function restart_pri() {
 		echo -e "${RED}[*] Restarted ${NC}"
 		sleep 1
 	else
-		stop_tor
+		stop_ser
 		echo -e "${RED}[*] Exiting ...${NC}"
 		exit 1
 	fi
@@ -200,7 +246,7 @@ function open_browser() {
 
 }
 
-function stop_tor() {
+function stop_ser() {
 	check_root "[!] for stoping tor"
 	if [ -f "/etc/resolv.tmp-ddtor.conf" ]; then
 		cp /etc/resolv.tmp-ddtor.conf /etc/resolv.conf
@@ -230,7 +276,7 @@ function check_net() {
 		echo -e "${RED}[-] You disconnect${NC}"
 		isactive=$(systemctl is-active tor.service)
 		if [ $isactive == "active" ]; then
-			stop_tor
+			stop_ser
 		fi
 		exit 1
 	fi
@@ -244,15 +290,15 @@ while [[ $# -gt 0 ]]; do
 	key="$1"
 	case $key in
 	-u | --start)
-		start_tor
+		start_ser
 		shift # past argument
 		;;
 	-d | --stop)
-		stop_tor
+		stop_ser
 		shift # past argument
 		;;
 	-s | --status)
-		status_tor 1
+		status_all
 		shift # past argument
 		;;
 	-o | --open)
