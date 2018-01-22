@@ -55,6 +55,7 @@ function config_ddtorrc() {
 		exit 1
 	fi
 	echo "forward-socks5 / localhost:9050 ." | tee -a /etc/privoxy/config >/dev/null
+	echo "http	127.0.0.1 8118" | tee -a /etc/proxychains.conf >/dev/null
 }
 
 function install_ddtor() {

@@ -276,6 +276,7 @@ function stop_ser() {
 	sleep 1
 	systemctl stop tor.service
 	echo -e "${RED}[-] Stop Tor ${NC}"
+	close_browser
 }
 
 function check_root() {
