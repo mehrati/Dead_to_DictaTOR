@@ -246,12 +246,18 @@ function open_browser() {
 	if [ $? == 1 ]; then
 		echo -e "${RED}[-] Somthing Problem ${NC}"
 		stop_ser
+	else
+		if [[ $EUID -eq 0 ]]; then
+			echo -e "[*] Please run command as normal user not root"
+			exit 1
+		fi
+		nohup proxychains $1 $2 1>/dev/null 2>&1 &
 	fi
-	proxychains $1 $2
 }
 
 function close_browser() {
 	pkill proxychains
+	pkill firefox
 }
 
 function stop_ser() {
