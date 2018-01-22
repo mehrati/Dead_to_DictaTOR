@@ -7,19 +7,21 @@ NC='\033[0m' # No Color
 usage() {
 
 	echo "Dead to Dictator"
-	echo "this script use tor network for passing the boycott"
+	echo "This script use tor,privoxy,dnscrypt,proxychain for passing the boycott "
 	echo "Usage:$ ddtor [OPTION]..."
 	echo "Options:"
 	echo "  -u, --start"
-	echo "    Up Tor Service"
+	echo "    Up Services"
 	echo "  -d, --stop"
-	echo "    Down Tor Service"
+	echo "    Down Services"
 	echo "  -s, --status"
-	echo "    Status Tor Service"
+	echo "    Status Services"
 	echo "  -o, --open"
 	echo "    Open Web Browser"
+	echo "  -q, --close"
+	echo "    Quit Web Browser"
 	echo "  -c, --conf-update"
-	echo "    Update config ddtorrc"
+	echo "    Update tor bridge"
 	echo "  -v, --version"
 	echo "    Display the version"
 	echo "  -h, --help"
@@ -67,17 +69,17 @@ function start_ser() {
 		echo -e "${RED}[-] Tor Failed${NC}"
 		restart_tor
 	fi
-	status_all > /dev/null
+	status_all >/dev/null
 	if [ $? == 1 ]; then
 		echo -e "${RED}[-] Somthing Problem ${NC}"
 		stop_ser
 	fi
-	echo -e "[*] Dnscrypt-proxy is connecting ..."
+	echo -e "${GREEN}[*] Dnscrypt-proxy is connecting ...${NC}"
 	status_dns 15
 	if [ $? == 2 ]; then
 		echo -e "${GREEN}[+] Dnscrypt-proxy Connect ${NC}"
 	fi
-	echo -e "[*] Tor is connecting ..."
+	echo -e "${GREEN}[*] Tor is connecting ...${NC}"
 	status_tor 30
 	if [ $? == 3 ]; then
 		echo -e "${GREEN}[+] Tor Client Connect ${NC}"
@@ -125,8 +127,10 @@ function status_all() {
 		echo -e "${RED}[-] Tor Failed${NC}"
 		failed=true
 	fi
-	if $failed ; then
+	if $failed; then
 		return 1
+	else
+		return 0
 	fi
 }
 function status_dns() {
@@ -238,12 +242,16 @@ function help_ddtor() {
 }
 
 function open_browser() {
-	if systemctl status tor.service | grep "Bootstrapped 100%: Done" >/dev/null; then
-		proxychains $1 $2
-	else
-		echo -e "${RED}[-] Tor not connected${NC}"
+	status_all >/dev/null
+	if [ $? == 1 ]; then
+		echo -e "${RED}[-] Somthing Problem ${NC}"
+		stop_ser
 	fi
+	proxychains $1 $2
+}
 
+function close_browser() {
+	pkill proxychains
 }
 
 function stop_ser() {
@@ -307,6 +315,10 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		shift # past argument
 		;;
+	-q | --close)
+		close_browser
+		shift # past argument
+		;;
 	-c | --conf-update)
 		update_conf $2
 		shift # past argument
@@ -317,7 +329,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-v | --version)
-		echo -e "${GREEN}[+] Dead to Dictator Version 0.3 beta ${NC}"
+		echo -e "${GREEN}[+] ddtor version 0.3 ${NC}"
 		shift # past argument
 		;;
 	*)

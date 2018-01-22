@@ -9,11 +9,11 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 
 # Death to DictaTOR
-    autamically installand and manage Tor in either a Arch based distro and ubuntu
+    ddtor manage and config services tor privoxy dnscrypt-proxy for passing the boycott 
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Dependency
-    you must install Tor Client , Dnscrypt-proxy , Privoxy , Proxychain-ng
+    you must install Tor Client , Dnscrypt-proxy , Privoxy , Proxychain-ng 
 ## Install
     get bridge by send mail to bellow address
     TO : bridges@torproject.org
@@ -33,14 +33,14 @@ ______           _   _       _         ______ _      _      _____ ___________
     # status tor service
     $ sudo ddtor --status
     # open firefox browser
-    $ sudo ddtor --open
+    $ sudo ddtor --open firefox
     # stop tor service
     $ sudo ddtor --stop
 ```
 ## Firefox
     better for you use FoxyProxy plugin firefox
     open firefox go to add-ons search  and install foxyproxy 
-    set type proxy = SOCKS 5 , IP address = 127.0.0.1 , PORT = 8118
+    set type proxy = HTTP , IP address = 127.0.0.1 , PORT = 8118
 ## Telegram Massanger
     open telegram go to setting -> connecting through proxy -> HTTP with custom http-proxy 
     set proxy Hostname = 127.0.0.1 , Port = 8118 
@@ -51,5 +51,5 @@ ______           _   _       _         ______ _      _      _____ ___________
 ## Contributing
     Contributions are welcome! Please feel free to submit a Pull Request.
 ## Version
-    V 0.3 beta
+    v 0.3 
 
