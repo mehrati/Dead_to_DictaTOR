@@ -3,6 +3,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
+VER='0.3'
 
 usage() {
 
@@ -21,11 +22,11 @@ usage() {
 	echo "  -q, --close"
 	echo "    Quit Web Browser"
 	echo "  -c, --conf-update"
-	echo "    Update tor bridge"
-	echo "  -v, --version"
-	echo "    Display the version"
+	echo "    Update Tor Bridge"
 	echo "  -h, --help"
 	echo "    Display Help Massage"
+	echo "  -v, --version"
+	echo "    Display Script Version"
 
 	exit 0
 }
@@ -336,7 +337,7 @@ while [[ $# -gt 0 ]]; do
 		shift # past argument
 		;;
 	-v | --version)
-		echo -e "${GREEN}[+] ddtor version 0.3 ${NC}"
+		echo -e "${GREEN}[+] ddtor version $VER ${NC}"
 		shift # past argument
 		;;
 	*)
