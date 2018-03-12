@@ -154,8 +154,8 @@ function status_all() {
 function status_dns() {
 	secdns=$1
 	startdns=$SECONDS
-	while true; do
-		if systemctl status dnscrypt-proxy.service | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" >/dev/null; then
+	while true; do # grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b"
+		if systemctl status dnscrypt-proxy.service | grep "dnscrypt-proxy is ready" >/dev/null; then
 			return 2
 		else
 			if [ $(expr $SECONDS - $startdns) -ge $secdns ]; then

@@ -9,11 +9,11 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 
 # Death to DictaTOR
-    ddtor manage and config services tor privoxy dnscrypt-proxy for passing the boycott 
+    ddtor manage and config services tor privoxy dnscrypt-proxy2 for passing the boycott 
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Dependency
-    you must install Tor Client , Dnscrypt-proxy , Privoxy , Proxychain-ng 
+    you must install Tor Client , Dnscrypt-proxy2 , Privoxy , Proxychain-ng 
 ## Install
     get bridge by send mail to bellow address
     TO : bridges@torproject.org
