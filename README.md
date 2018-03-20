@@ -10,7 +10,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 
 ***Death to DictaTOR*** <br>
     ddtor manage and config tor privoxy dnscrypt-proxy2 services for linux distribution like ubuntu , archlinux and ... with gnome desktop
-**Demo**<br>
+##Demo
 [![asciicast](https://asciinema.org/a/171201)](https://asciinema.org/a/171201)
 
 <br>**Note** <br>
