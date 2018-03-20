@@ -13,13 +13,10 @@ ______           _   _       _         ______ _      _      _____ ___________
 # Note
     If you need anonymity or strong privacy, manually run torbrowser
 ## Dependency
-    you must install Tor Client , Dnscrypt-proxy2 , Privoxy , Proxychain-ng 
+    you must install [a Tor link](https://github.com/torproject/tor) ,[a Dnscrypt-proxy2 link](https://github.com/)  , [a Privoxy link](https://www.privoxy.org/)  , [a Proxychain-ng link](https://github.com/rofl0r/proxychains-ng)  , [a obfs4 link](https://github.com/Yawning/obfs4)  
 ## Install
-    get bridge by send mail to bellow address
-    TO : bridges@torproject.org
-    Subject : no need subject
-    Body : get transport obfs4
-    go to project and save bridges to ddtorrc file
+    get bridges by sending mail to bridges@bridges.torproject.org with the line "get transport obfs4" by itself in the body of the mail.
+    go to project and copy bridges text to ddtorrc file
 ```sh
     $ chmod 755 ./install
     $ sudo ./install
