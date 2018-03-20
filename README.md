@@ -10,9 +10,8 @@ ______           _   _       _         ______ _      _      _____ ___________
 
 ***Death to DictaTOR*** <br>
     ddtor manage and config tor privoxy dnscrypt-proxy2 services for linux distribution like ubuntu , archlinux and ... with gnome desktop
-##Demo
-[![asciicast](https://asciinema.org/a/171201)](https://asciinema.org/a/171201)
-
+<br>**Demo**<br>
+[![asciicast](https://asciinema.org/a/171201.png)](https://asciinema.org/a/171201)
 <br>**Note** <br>
     If you need anonymity or strong privacy, manually run torbrowser
 <br>**Dependency** <br>
