@@ -37,7 +37,7 @@ function check_package() {
 
 }
 
-function config_ddtorrc() {
+function config_ddtor() {
 	if cat ddtorrc | grep "obfs4" >/dev/null; then
 		if [ -f "/etc/tor/torrc" ]; then
 			echo "Backup the old torrc to '/etc/tor/torrc.ddtor-backup'..."
@@ -66,5 +66,5 @@ function install_ddtor() {
 
 check_root "for install"
 check_package
-config_ddtorrc
+config_ddtor
 install_ddtor
