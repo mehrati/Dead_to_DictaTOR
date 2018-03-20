@@ -9,7 +9,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 
 ***Death to DictaTOR*** <br>
-    ddtor manage and config tor privoxy dnscrypt-proxy2 services for linux distribution like ubuntu , archlinux and ... with gnome desktop
+    ddtor manage and config tor privoxy dnscrypt-proxy2 services for linux distribution like debian ,ubuntu , archlinux and ...
 <br>**Demo**<br>
 [![asciicast](https://asciinema.org/a/171201.png)](https://asciinema.org/a/171201)
 <br>**Note** <br>
@@ -18,7 +18,7 @@ ______           _   _       _         ______ _      _      _____ ___________
     you must install [Tor](https://github.com/torproject/tor) ,[obfs4](https://github.com/Yawning/obfs4) ,[Dnscrypt-proxy2](https://github.com/jedisct1/dnscrypt-proxy)  , [Privoxy](https://www.privoxy.org)  
 <br>**Install**<br>
     get bridges by sending mail to bridges@bridges.torproject.org with the line "get transport obfs4" by itself in the body of the mail.
-    go to project and copy bridges text to ddtorrc file
+    go to project and copy bridges text to ddtorrc file and 
 ```sh
     $ chmod 755 ./install
     $ sudo ./install
@@ -26,11 +26,11 @@ ______           _   _       _         ______ _      _      _____ ___________
 <br>**Run**<br>
 ```sh
     # open terminal and run command
-    # start tor service
+    # start services
     $ sudo ddtor --start
-    # status tor service
+    # status services
     $ sudo ddtor --status
-    # stop tor service
+    # stop services
     $ sudo ddtor --stop
 ```
 <br>**Telegram Massanger**<br>
@@ -42,5 +42,5 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 <br>**Contributing**<br>
     Contributions are welcome! Please feel free to submit a Pull Request.
-<br>**Version v0.4**
+<br>**Version v0.4 beta**
 
