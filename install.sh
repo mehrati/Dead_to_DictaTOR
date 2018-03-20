@@ -55,7 +55,7 @@ function config_ddtor() {
 		exit 1
 	fi
 	echo "forward-socks5 / localhost:9050 ." | tee -a /etc/privoxy/config >/dev/null
-	echo "http	127.0.0.1 8118" | tee -a /etc/proxychains.conf >/dev/null
+	# echo "http	127.0.0.1 8118" | tee -a /etc/proxychains.conf >/dev/null
 	echo "server_names = ['scaleway-fr', 'google', 'yandex']" | tee -a /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 }
 

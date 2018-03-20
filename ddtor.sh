@@ -3,7 +3,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
-VER='0.3'
+VER='0.4'
 
 usage() {
 
@@ -12,9 +12,9 @@ usage() {
 	echo "Usage:$ ddtor [OPTION]..."
 	echo "Options:"
 	echo "  -u, --start"
-	echo "    Start/Up Services"
+	echo "    Start | Up Services"
 	echo "  -d, --stop"
-	echo "    Stop/Down Services"
+	echo "    Stop | Down Services"
 	echo "  -s, --status"
 	echo "    Status Services"
 	echo "  -b, --update-bridge"
@@ -260,7 +260,7 @@ if whereis gnome-shell >/dev/null; then
     if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null ; then
 	   gsettings set org.gnome.system.proxy mode 'none'
 	   echo -e "${RED}[-] Disabled network proxy gnome${NC}"
-	fi
+    fi
 fi
 }
 function stop_service() {
