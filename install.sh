@@ -17,10 +17,6 @@ function check_package() {
 		echo "[-] obfs4proxy not installed"
 		ok=false
 	fi
-	if ! whereis proxychains >/dev/null; then
-		echo "[-] proxychains not installed"
-		ok=false
-	fi
 	if ! whereis dnscrypt-proxy >/dev/null; then
 		echo "[-] dnscrypt-proxy not installed"
 		ok=false
