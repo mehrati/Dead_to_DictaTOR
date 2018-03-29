@@ -8,29 +8,23 @@ function check_root() {
 }
 
 function check_package() {
-	ok=true
-	if ! whereis tor >/dev/null; then
+	
+	if ! which tor > /dev/null 2>&1; then
 		echo "[-] tor not installed"
-		ok=false
+		return 1
 	fi
-	if ! whereis obfs4proxy >/dev/null; then
+	if ! which obfs4proxy > /dev/null 2>&1; then
 		echo "[-] obfs4proxy not installed"
-		ok=false
+		return 1
 	fi
-	if ! whereis dnscrypt-proxy >/dev/null; then
+	if ! which dnscrypt-proxy > /dev/null 2>&1; then
 		echo "[-] dnscrypt-proxy not installed"
-		ok=false
+		return 1
 	fi
-	if ! whereis privoxy >/dev/null; then
+	if ! which privoxy > /dev/null 2>&1; then
 		echo "[-] privoxy not installed"
-		ok=false
+		return 1
 	fi
-	if [ $ok ]; then
-		echo "[+] Yes All package installed"
-	else
-		exit 1
-	fi
-
 }
 
 function config_ddtor() {
@@ -50,9 +44,10 @@ function config_ddtor() {
 		echo "ddtroc is empty please see README file"
 		exit 1
 	fi
-	echo "forward-socks5 / localhost:9050 ." | tee -a /etc/privoxy/config >/dev/null
-	# echo "http	127.0.0.1 8118" | tee -a /etc/proxychains.conf >/dev/null
-	echo "server_names = ['scaleway-fr', 'google', 'yandex']" | tee -a /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+	lineNumPri="$(grep -n "forward-socks5t   /               127.0.0.1:9050 ." /etc/privoxy/config | head -n 1 | cut -d: -f1)"
+	sed -i "$lineNumPri s/^##*//" /etc/privoxy/config
+	lineNumDns="$(grep -n "server_names = " /etc/dnscrypt-proxy/dnscrypt-proxy.toml | head -n 1 | cut -d: -f1)"
+	sed -i "$lineNumDns s/^##*//" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 }
 
 function install_ddtor() {
@@ -62,5 +57,9 @@ function install_ddtor() {
 
 check_root "for install"
 check_package
+if [[ $? -eq 1 ]];then
+	exit 1
+fi
+echo "[+] Yes All package installed"
 config_ddtor
 install_ddtor
