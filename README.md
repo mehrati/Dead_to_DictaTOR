@@ -15,7 +15,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 <br>**Note** <br>
     If you need anonymity or strong privacy, manually run torbrowser
 <br>**Dependency** <br>
-    you must install [Tor](https://github.com/torproject/tor) ,[obfs4](https://github.com/Yawning/obfs4) ,[Dnscrypt-proxy2](https://github.com/jedisct1/dnscrypt-proxy)  , [Privoxy](https://www.privoxy.org) , [torsocks](https://github.com/dgoulet/torsocks)
+    you must install [Tor](https://github.com/torproject/tor) ,[obfs4](https://github.com/Yawning/obfs4) ,[Dnscrypt-proxy2](https://github.com/jedisct1/dnscrypt-proxy)  , [Privoxy](https://www.privoxy.org) , [Torsocks](https://github.com/dgoulet/torsocks)
 <br>**Install**<br>
     get bridges by sending mail to bridges@bridges.torproject.org with the line "get transport obfs4" by itself in the body of the mail.
     go to project and copy bridges text to ddtorrc file and 
@@ -35,20 +35,24 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 <br>**Google Chrome**<br>
 use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)
+
 <br>**Firefox**<br>
-use [foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/)
+use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/)
+
+<br>**Telegram Massanger**<br>
+    setting -> connecting through proxy -> HTTP with custom http-proxy 
+    set proxy Hostname = 127.0.0.1 , Port = 8118 
+
 <br>**CMD**<br>
 ```sh
     torify commands...
 ```
-<br>**Telegram Massanger**<br>
-    setting -> connecting through proxy -> HTTP with custom http-proxy 
-    set proxy Hostname = 127.0.0.1 , Port = 8118 
 <br>**uninstall**<br>
 ```sh
     $ sudo ./uninstall
 ```
 <br>**Contributing**<br>
     Contributions are welcome! Please feel free to submit a Pull Request.
+
 <br>**Version v0.4 beta**
 
