@@ -38,12 +38,16 @@ function config_ddtor() {
 		echo "Log notice syslog" | tee -a /etc/tor/torrc >/dev/null
 		echo "DataDirectory /var/lib/tor" | tee -a /etc/tor/torrc >/dev/null
 		echo "UseBridges 1" | tee -a /etc/tor/torrc >/dev/null
-		echo "ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy" | tee -a /etc/tor/torrc >/dev/null
+		echo "ClientTransportPlugin obfs4 exec /usr/local/bin/obfs4proxy" | tee -a /etc/tor/torrc >/dev/null
 		sed s/" obfs4"/"bridge obfs4"/g ddtorrc | tee -a /etc/tor/torrc >/dev/null
 	else
 		echo "ddtroc is empty please see README file"
 		exit 1
 	fi
+	if ! whereis obfs4proxy | grep "obfs4proxy: /usr/local/bin/obfs4proxy" >/dev/null 2>&1 ;then
+		d="/usr/local/bin/"
+	    test -d $d || mkdir -p $d && cp $(whereis obfs4proxy | cut -d ':' -f 2) $d
+    fi
 	lineNumPri="$(grep -n "forward-socks5t   /               127.0.0.1:9050 ." /etc/privoxy/config | head -n 1 | cut -d: -f1)"
 	sed -i "$lineNumPri s/^##*//" /etc/privoxy/config
 	lineNumDns="$(grep -n "server_names = " /etc/dnscrypt-proxy/dnscrypt-proxy.toml | head -n 1 | cut -d: -f1)"

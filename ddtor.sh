@@ -252,14 +252,14 @@ if whereis gnome-shell >/dev/null; then
 	gsettings set org.gnome.system.proxy.socks host 127.0.0.1
 	gsettings set org.gnome.system.proxy.socks port 9050
 	gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12']"
-	echo -e "${GREEN}[+] Enable network proxy ${NC}"
+	echo -e "${GREEN}[+] Enable Network Proxy ${NC}"
 fi
 }
 function unset_proxy_setting_gnome() {
 if whereis gnome-shell >/dev/null; then
     if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null ; then
 	   gsettings set org.gnome.system.proxy mode 'none'
-	   echo -e "${RED}[-] Disabled network proxy ${NC}"
+	   echo -e "${RED}[-] Disabled Network Proxy ${NC}"
     fi
 fi
 }
