@@ -35,14 +35,11 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 <br>**Google Chrome**<br>
 use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)
-
 <br>**Firefox**<br>
 use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/)
-
 <br>**Telegram Massanger**<br>
     setting -> connecting through proxy -> HTTP with custom http-proxy 
     set proxy Hostname = 127.0.0.1 , Port = 8118 
-
 <br>**CMD**<br>
 ```sh
     torify commands...
