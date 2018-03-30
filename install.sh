@@ -12,6 +12,10 @@ function check_package() {
 	if ! which tor > /dev/null 2>&1; then
 		echo "[-] tor not installed"
 		return 1
+	fi 
+	if ! which torsocks > /dev/null 2>&1; then
+		echo "[-] torsocks not installed"
+		return 1
 	fi
 	if ! which obfs4proxy > /dev/null 2>&1; then
 		echo "[-] obfs4proxy not installed"
