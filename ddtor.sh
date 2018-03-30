@@ -244,7 +244,7 @@ function help_ddtor() {
 	echo "with the line 'get transport obfs4' by itself in the body of the mail."
 }
 function set_proxy_setting_gnome() {
-if whereis gnome-shell >/dev/null; then
+if which gsettings >/dev/null 2>&1; then
     #Set IP and Port on HTTP and SOCKS gnome-shell
 	gsettings set org.gnome.system.proxy mode 'manual'
 	gsettings set org.gnome.system.proxy.http host 127.0.0.1
@@ -256,7 +256,7 @@ if whereis gnome-shell >/dev/null; then
 fi
 }
 function unset_proxy_setting_gnome() {
-if whereis gnome-shell >/dev/null; then
+if which gsettings >/dev/null 2>&1; then
     if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null ; then
 	   gsettings set org.gnome.system.proxy mode 'none'
 	   echo -e "${RED}[-] Disabled Network Proxy ${NC}"
