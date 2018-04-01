@@ -68,6 +68,6 @@ check_package
 if [[ $? -eq 1 ]];then
 	exit 1
 fi
-echo "[+] Yes All package installed"
+echo "[+] Ok all package installed"
 config_ddtor
 install_ddtor

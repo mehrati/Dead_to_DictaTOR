@@ -3,7 +3,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
-VER='0.4 beta'
+VER='0.4'
 
 usage() {
 

@@ -51,5 +51,5 @@ use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standar
 <br>**Contributing**<br>
     Contributions are welcome! Please feel free to submit a Pull Request.
 
-<br>**Version v0.4 beta**
+<br>**Version v0.4**
 
