@@ -281,17 +281,18 @@ function stop_service() {
 	unset_proxy_setting_gnome
 }
 function con_net() {
-	if ! ping google.com -c 2 1>/dev/null 2>&1; then
+	if ! ping google.com -c 3 1>/dev/null 2>&1; then
 		if type nmcli >/dev/null 2>&1; then
 			nmcli radio wifi on
 			declare -a uuids=($(nmcli -f UUID con show | sed '/UUID/d'))
 			for uid in "${uuids[@]}"; do
 				nmcli con up uuid $uid 1>/dev/null 2>&1
 				sleep 1
-				if ping google.com -c 2 1>/dev/null 2>&1; then
+				if ping google.com -c 3 1>/dev/null 2>&1; then
 					echo -e "${GREEN}[+] Connect to internet ...${NC}"
 					break
 				fi
+				nmcli con down uuid $uid 1>/dev/null 2>&1
 			done
 		else
 			echo -e "${RED}[-] Connect to internet failed${NC}"
