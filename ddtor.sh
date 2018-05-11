@@ -27,7 +27,7 @@ usage() {
 	exit 0
 }
 function start_service() {
-	check_net
+	con_net
 	isactivedns=$(sudo systemctl is-active dnscrypt-proxy.service)
 	if [ $isactivedns == "inactive" ]; then
 		sudo systemctl start dnscrypt-proxy.service
@@ -149,7 +149,7 @@ function status_all() {
 function status_dns() {
 	secdns=$1
 	startdns=$SECONDS
-	while true; do 
+	while true; do
 		if sudo systemctl status dnscrypt-proxy.service | grep "dnscrypt-proxy is ready" >/dev/null; then
 			return 2
 		else
@@ -165,7 +165,7 @@ function status_dns() {
 }
 function status_tor() {
 	sec=$1
-	check_net
+	con_net
 	start=$SECONDS
 	count=0
 	while true; do
@@ -244,24 +244,24 @@ function help_ddtor() {
 	echo "with the line 'get transport obfs4' by itself in the body of the mail."
 }
 function set_proxy_setting_gnome() {
-if which gsettings >/dev/null 2>&1; then
-    #Set IP and Port on HTTP and SOCKS gnome-shell
-	gsettings set org.gnome.system.proxy mode 'manual'
-	gsettings set org.gnome.system.proxy.http host 127.0.0.1
-	gsettings set org.gnome.system.proxy.http port 8118
-	gsettings set org.gnome.system.proxy.socks host 127.0.0.1
-	gsettings set org.gnome.system.proxy.socks port 9050
-	gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12']"
-	echo -e "${GREEN}[+] Enable Network Proxy ${NC}"
-fi
+	if which gsettings >/dev/null 2>&1; then
+		#Set IP and Port on HTTP and SOCKS gnome-shell
+		gsettings set org.gnome.system.proxy mode 'manual'
+		gsettings set org.gnome.system.proxy.http host 127.0.0.1
+		gsettings set org.gnome.system.proxy.http port 8118
+		gsettings set org.gnome.system.proxy.socks host 127.0.0.1
+		gsettings set org.gnome.system.proxy.socks port 9050
+		gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12']"
+		echo -e "${GREEN}[+] Enable Network Proxy ${NC}"
+	fi
 }
 function unset_proxy_setting_gnome() {
-if which gsettings >/dev/null 2>&1; then
-    if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null ; then
-	   gsettings set org.gnome.system.proxy mode 'none'
-	   echo -e "${RED}[-] Disabled Network Proxy ${NC}"
-    fi
-fi
+	if which gsettings >/dev/null 2>&1; then
+		if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null; then
+			gsettings set org.gnome.system.proxy mode 'none'
+			echo -e "${RED}[-] Disabled Network Proxy ${NC}"
+		fi
+	fi
 }
 function stop_service() {
 	if [ -f "/etc/resolv.tmp-ddtor.conf" ]; then
@@ -280,14 +280,27 @@ function stop_service() {
 	echo -e "${RED}[-] Stop Tor ${NC}"
 	unset_proxy_setting_gnome
 }
-function check_net() {
+function con_net() {
 	if ! ping google.com -c 2 1>/dev/null 2>&1; then
-		echo -e "${RED}[-] You disconnect${NC}"
-		status_all >/dev/null
-		if [ $? == 0 ]; then
-			stop_service > /dev/null
+		if type nmcli >/dev/null 2>&1; then
+			nmcli radio wifi on
+			declare -a uuids=($(nmcli -f UUID con show | sed '/UUID/d'))
+			for uid in "${uuids[@]}"; do
+				nmcli con up uuid $uid 1>/dev/null 2>&1
+				sleep 1
+				if ping google.com -c 2 1>/dev/null 2>&1; then
+					echo -e "${GREEN}[+] Connect to internet ...${NC}"
+					break
+				fi
+			done
+		else
+			echo -e "${RED}[-] Connect to internet failed${NC}"
+			status_all >/dev/null
+			if [ $? == 0 ]; then
+				stop_service >/dev/null
+			fi
+			exit 1
 		fi
-		exit 1
 	fi
 }
 if [ $# -eq 0 ]; then
