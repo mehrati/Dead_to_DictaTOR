@@ -35,13 +35,13 @@ ______           _   _       _         ______ _      _      _____ ___________
     $ sudo ddtor --stop
 ```
 <br>**Google Chrome**<br>
-```
+
 use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)
-```
+
 <br>**Firefox**<br>
-```
+
 use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/)
-```
+
 <br>**Telegram Massanger**<br>
 ```
     setting -> connecting through proxy -> HTTP with custom http-proxy 
