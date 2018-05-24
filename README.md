@@ -21,7 +21,7 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```sh
     $ git clone https://github.com/mehrati/ddtor.git
     $ cd ddtor/
-    $ nano ddtorrc # copy bridges and paste in to end file ddtorrc
+    $ nano ddtorrc # paste new bridges at the end file ddtorrc
     $ chmod 755 ./install.sh
     $ sudo ./install.sh
 ```
@@ -35,22 +35,29 @@ ______           _   _       _         ______ _      _      _____ ___________
     $ sudo ddtor --stop
 ```
 <br>**Google Chrome**<br>
+```
 use [SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)
+```
 <br>**Firefox**<br>
+```
 use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/)
+```
 <br>**Telegram Massanger**<br>
+```
     setting -> connecting through proxy -> HTTP with custom http-proxy 
-    set proxy Hostname = 127.0.0.1 , Port = 8118 
+    set proxy Hostname = 127.0.0.1 , Port = 8118
+```
 <br>**CMD**<br>
 ```sh
     torify commands...
 ```
 <br>**uninstall**<br>
 ```sh
-    $ sudo ./uninstall
+    $ sudo ./uninstall.sh
 ```
 <br>**Contributing**<br>
+```
     Contributions are welcome! Please feel free to submit a Pull Request.
-
+```
 <br>**Version v0.4**
 
