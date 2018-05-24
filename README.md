@@ -18,14 +18,15 @@ ______           _   _       _         ______ _      _      _____ ___________
     you must install [Tor](https://github.com/torproject/tor) ,[obfs4](https://github.com/Yawning/obfs4) ,[Dnscrypt-proxy2](https://github.com/jedisct1/dnscrypt-proxy)  , [Privoxy](https://www.privoxy.org) , [Torsocks](https://github.com/dgoulet/torsocks)
 <br>**Install**<br>
     get bridges by sending mail to bridges@bridges.torproject.org with the line "get transport obfs4" by itself in the body of the mail no need subject.
-    go to project and copy bridges text to ddtorrc file and 
 ```sh
-    $ chmod 755 ./install
-    $ sudo ./install
+    $ git clone https://github.com/mehrati/ddtor.git
+    $ cd ddtor/
+    $ nano ddtorrc # copy bridges and paste in to end file ddtorrc
+    $ chmod 755 ./install.sh
+    $ sudo ./install.sh
 ```
 <br>**Run**<br>
 ```sh
-    # open terminal and run command
     # start services
     $ sudo ddtor --start
     # status services
