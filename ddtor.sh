@@ -265,6 +265,10 @@ function unset_proxy_setting() {
 			echo -e "${RED}[-] Disabled Network Proxy ${NC}"
 		fi
 	fi
+	unset http_proxy
+	unset http_proxy
+	unset HTTP_PROXY
+	unset HTTPS_PROXY
 }
 function stop_service() {
 	if [ -f "/etc/resolv.tmp-ddtor.conf" ]; then
