@@ -3,7 +3,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
-VER='0.4'
+VER='0.5'
 
 usage() {
 
@@ -53,7 +53,6 @@ function start_service() {
 	if [ $isactivetor == "inactive" ]; then
 		sudo systemctl start tor.service
 		echo -e "${GREEN}[+] Tor Start${NC}"
-
 	fi
 	sleep 1
 	isfailedtor=$(sudo systemctl is-failed tor.service)
@@ -243,7 +242,7 @@ function help_ddtor() {
 	echo "get bridges by sending mail to bridges@bridges.torproject.org"
 	echo "with the line 'get transport obfs4' by itself in the body of the mail."
 }
-function set_proxy_setting_gnome() {
+function set_proxy_setting() {
 	if which gsettings >/dev/null 2>&1; then
 		#Set IP and Port on HTTP and SOCKS gnome-shell
 		gsettings set org.gnome.system.proxy mode 'manual'
@@ -254,8 +253,12 @@ function set_proxy_setting_gnome() {
 		gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12']"
 		echo -e "${GREEN}[+] Enable Network Proxy ${NC}"
 	fi
+	export http_proxy="http://127.0.0.1:8118"
+	export https_proxy="https://127.0.0.1:8118"
+	export HTTPS_PROXY="https://127.0.0.1:8118"
+	export HTTP_PROXY="http://127.0.0.1:8118"
 }
-function unset_proxy_setting_gnome() {
+function unset_proxy_setting() {
 	if which gsettings >/dev/null 2>&1; then
 		if gsettings get org.gnome.system.proxy mode | grep 'manual' >/dev/null; then
 			gsettings set org.gnome.system.proxy mode 'none'
@@ -278,7 +281,7 @@ function stop_service() {
 	sleep 1
 	sudo systemctl stop tor.service
 	echo -e "${RED}[-] Stop Tor ${NC}"
-	unset_proxy_setting_gnome
+	unset_proxy_setting
 }
 function con_net() {
 	if ! ping google.com -c 3 1>/dev/null 2>&1; then
@@ -304,6 +307,7 @@ function con_net() {
 		fi
 	fi
 }
+
 if [ $# -eq 0 ]; then
 	usage
 fi
@@ -312,7 +316,7 @@ while [[ $# -gt 0 ]]; do
 	case $key in
 	-u | --start)
 		start_service
-		set_proxy_setting_gnome
+		set_proxy_setting
 		shift # past argument
 		;;
 	-d | --stop)

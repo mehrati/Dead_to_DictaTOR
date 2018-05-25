@@ -49,7 +49,7 @@ use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standar
 ```
 <br>**CMD**<br>
 ```sh
-    torify commands...
+    $ torify bash
 ```
 <br>**uninstall**<br>
 ```sh
@@ -59,5 +59,5 @@ use [Foxyproxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standar
 ```
     Contributions are welcome! Please feel free to submit a Pull Request.
 ```
-<br>**Version v0.4**
+<br>**Version v0.5**<br>
 
