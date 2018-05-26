@@ -9,13 +9,13 @@ ______           _   _       _         ______ _      _      _____ ___________
 ```
 
 ***Death to DictaTOR*** <br>
-    ddtor install and manage and config tor privoxy dnscrypt-proxy2 services for arch linux distribution
+    ddtor install and manage and config tor privoxy dnscrypt-proxy2 services for arch base and debain base linux distribution
 <br>**Demo**<br>
 [![asciicast](https://asciinema.org/a/171213.png)](https://asciinema.org/a/171213)
 <br>**Note** <br>
     If you need anonymity or strong privacy, manually run torbrowser
 <br>**Dependency** <br>
-   If you are using a distribution other than archlinux , you must install these packages manually
+   If you are using a distribution other than arch base and debain base you must install these packages manually
     [Tor](https://github.com/torproject/tor) ,[obfs4](https://github.com/Yawning/obfs4) ,[Dnscrypt-proxy2](https://github.com/jedisct1/dnscrypt-proxy)  , [Privoxy](https://www.privoxy.org) , [Torsocks](https://github.com/dgoulet/torsocks)
 <br>**Install**<br>
     get bridges by sending mail to bridges@bridges.torproject.org with the line "get transport obfs4" by itself in the body of the mail no need subject.

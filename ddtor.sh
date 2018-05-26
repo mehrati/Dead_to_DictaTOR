@@ -160,7 +160,6 @@ function status_dns() {
 			sleep 2
 		fi
 	done
-
 }
 function status_tor() {
 	sec=$1
@@ -236,7 +235,6 @@ function update_bridge() {
 		echo -e "${RED}$1 file is empty or ...${NC}"
 		exit 1
 	fi
-
 }
 function help_ddtor() {
 	echo "get bridges by sending mail to bridges@bridges.torproject.org"
