@@ -31,7 +31,6 @@ function check_package() {
 		fi
 	fi
 	if ! which torsocks >/dev/null 2>&1; then
-		echo "[-] torsocks not installed"
 		if [ $dist == "deb" ]; then
 			apt install torsocks -y
 		elif [ $dist == "arch" ]; then
@@ -47,7 +46,6 @@ function check_package() {
 		if [ $dist == "deb" ]; then
 			apt install obfs4proxy -y
 		elif [ $dist == "arch" ]; then
-			echo "[-] obfs4proxy not installed"
 			echo '[archlinuxcn]' | sudo tee -a /etc/pacman.conf >/dev/null
 			echo 'SigLevel = Never' | sudo tee -a /etc/pacman.conf >/dev/null
 			echo 'Server = http://repo.archlinuxcn.org/$arch' | tee -a /etc/pacman.conf >/dev/null
@@ -61,7 +59,6 @@ function check_package() {
 		fi
 	fi
 	if ! which dnscrypt-proxy >/dev/null 2>&1; then
-		echo "[-] dnscrypt-proxy not installed"
 		if [ $dist == "deb" ]; then
 			sudo add-apt-repository ppa:shevchuk/dnscrypt-proxy
 			sudo apt update
@@ -78,7 +75,6 @@ function check_package() {
 		fi
 	fi
 	if ! which privoxy >/dev/null 2>&1; then
-		echo "[-] privoxy not installed"
 		if [ $dist == "deb" ]; then
 			apt install privoxy -y
 		elif [ $dist == "arch" ]; then
@@ -114,12 +110,10 @@ function config_ddtor() {
 	lineNumDns="$(grep -n "server_names = " /etc/dnscrypt-proxy/dnscrypt-proxy.toml | head -n 1 | cut -d: -f1)"
 	sed -i "$lineNumDns s/^##*//" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 }
-
 function install_ddtor() {
 	cp ddtor.sh /bin/ && mv /bin/ddtor.sh /bin/ddtor
 	chmod 755 /bin/ddtor
 }
-
 check_root
 check_dist
 check_package
