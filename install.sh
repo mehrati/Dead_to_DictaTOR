@@ -17,22 +17,17 @@ function check_dist() {
 		echo "you must install these packages manually"
 	fi
 }
-function install() {
-	if [ $dist == "deb" ]; then
-		apt install
-	elif [ $dist == "arch" ]; then
-		pacman -S
-	fi
-}
 function check_package() {
 	if ! which tor >/dev/null 2>&1; then
-		echo "[-] tor not installed"
 		if [ $dist == "deb" ]; then
 			apt install tor -y
 		elif [ $dist == "arch" ]; then
 			pacman -S tor
 		elif [ $dist == "fedora" ]; then
 			dnf install tor
+		else
+			echo "[-] tor not installed"
+			exit 1
 		fi
 	fi
 	if ! which torsocks >/dev/null 2>&1; then
@@ -43,6 +38,9 @@ function check_package() {
 			pacman -S torsocks
 		elif [ $dist == "fedora" ]; then
 			dnf install torsocks
+		else
+			echo "[-] torsocks not installed"
+			exit 1
 		fi
 	fi
 	if ! which obfs4proxy >/dev/null 2>&1; then
@@ -57,6 +55,9 @@ function check_package() {
 			pacman -S obfs4proxy
 		elif [ $dist == "fedora" ]; then
 			dnf install obfs4proxy
+		else
+			echo "[-] obfs4proxy not installed"
+			exit 1
 		fi
 	fi
 	if ! which dnscrypt-proxy >/dev/null 2>&1; then
@@ -71,6 +72,9 @@ function check_package() {
 			# dnf install dnscrypt-proxy
 			echo "please install manually dnscrypt-proxy and try again"
 			exit 1
+		else
+			echo "[-] dnscrypt-proxy not installed"
+			exit 1
 		fi
 	fi
 	if ! which privoxy >/dev/null 2>&1; then
@@ -81,10 +85,12 @@ function check_package() {
 			pacman -S privoxy
 		elif [ $dist == "fedora" ]; then
 			dnf install privoxy
+		else
+			echo "[-] privoxy not installed"
+			exit 1
 		fi
 	fi
 }
-
 function config_ddtor() {
 	if cat ddtorrc | grep "obfs4" >/dev/null; then
 		if [ -f "/etc/tor/torrc" ]; then
